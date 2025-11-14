@@ -8,11 +8,15 @@
 </head>
 <body>
     <div class="container">
+        <div class="logo-container">
+            <img class="logo" src="https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEX%2FeC9Pww5KenZvsmmds9ZsHTyU%2Fje9AyyOJcZpQhfNLJvNs7AzWcjASpgedKG%2BW5SDqAmR%2FoTOqqQm4XNMLLWsPJ29nr5iNxQssZyq%2FXC9FznbHvBnrXlnRign0D9jd2wN6Gbk3woRGOcNVM2pInwo7eF%2Fkzb%2B7AoLQV8zGDm6cPYVk6i%2BZBmX%2BphvvUWXuMKjw1e1enTUPOI88ak1RQ6eN%2F%2Bdaja9PI1xwz9Ci7S2oKO%2Fm7St1F%2FT%2BCfEiL1oAP0TfVqGL1nrIUp0QXvgNbl7bLeNKYtEeaBp0XMSCn1rlJWl8RCvVQHzHfnekQY5qkUfWq4huPR%2FydRwruSyDxUP00UdEVWsxn61%2FYDA8KmXqG9GKa1e1gSoeCrCaz0zQq09kF3NsVfBsmpSgBdauvTTB8vzukSiTY8us4Kp4Lgu1HeRBi0gEq5faR0udvn%2BfcOCCNoqKAS%2B8OnGdkl1OdHcSOu10JOor%2B%2FJl3yBwEn7IcHKJvPCi87hABar8%2FN9CvO7engZpgatc2pPmaPPt0JPlPF3iML8HOrD%2FNsyOLD1KSmd00ekVb%2FOFQpj%2FvYVvutm8gWuf9F3K4TBuA%3D%3D&allow_caching=true&sz=w512" alt="Logo Licores Torres">
+        </div>
+
         <div class="form-container" id="loginForm">
             <h2>Iniciar Sesión</h2>
-            <form>
-                <input type="email" placeholder="Correo electrónico" required />
-                <input type="password" placeholder="Contraseña" required />
+            <form onsubmit="return validarLogin()">
+                <input type="email" placeholder="Correo electrónico" />
+                <input type="password" placeholder="Contraseña" />
                 <button type="submit" class="btn">Ingresar</button>
             </form>
             <p>¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></p>
@@ -43,6 +47,17 @@
         function mostrarLogin() {
             document.getElementById("registerForm").classList.add("oculto");
             document.getElementById("loginForm").classList.remove("oculto");
+        }
+
+        function validarLogin() {
+            const email = document.querySelector('#loginForm input[type=email]').value;
+            const pass = document.querySelector('#loginForm input[type=password]').value;
+
+            if (email.trim() === '' || pass.trim() === '') {
+                alert('Debes registrarte para poder iniciar sesión.');
+                return false;
+            }
+            return true;
         }
     </script>
 </body>
