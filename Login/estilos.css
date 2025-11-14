@@ -19,6 +19,18 @@ body {
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 180px;
+    height: auto;
 }
 
 .form-container {
@@ -79,4 +91,22 @@ a:hover {
 
 .oculto {
     display: none;
+}
+
+.alerta {
+    position: fixed;
+    top: 20px;
+    right: -300px;
+    background: #ff4d4d;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    font-size: 16px;
+    transition: 0.3s ease;
+    z-index: 999;
+}
+
+.alerta.mostrar {
+    right: 20px;
 }
