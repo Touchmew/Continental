@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes y Análisis - LicoresTorres</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, #d97706, #b45309);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1rem 1.5rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-box {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo-box i {
+            font-size: 32px;
+            color: #d97706;
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text p {
+            color: #fde68a;
+            font-size: 0.875rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            color: #1f2937;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-title i {
+            color: #8b5cf6;
+            font-size: 2.5rem;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        /* Report Cards Grid */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .report-card.purple:hover {
+            border-color: #c4b5fd;
+            background: #faf5ff;
+        }
+
+        .report-card.blue:hover {
+            border-color: #93c5fd;
+            background: #eff6ff;
+        }
+
+        .report-card.green:hover {
+            border-color: #86efac;
+            background: #f0fdf4;
+        }
+
+        .report-card.amber:hover {
+            border-color: #fcd34d;
+            background: #fffbeb;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .report-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .report-icon.purple { background: #ede9fe; }
+        .report-icon.blue { background: #dbeafe; }
+        .report-icon.green { background: #d1fae5; }
+        .report-icon.amber { background: #fef3c7; }
+
+        .report-icon i {
+            font-size: 28px;
+        }
+
+        .report-icon.purple i { color: #8b5cf6; }
+        .report-icon.blue i { color: #3b82f6; }
+        .report-icon.green i { color: #10b981; }
+        .report-icon.amber i { color: #d97706; }
+
+        .report-info h3 {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-info p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .report-action {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-export {
+            background: none;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-export:hover {
+            background: #f9fafb;
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+        }
+
+        .btn-view {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-view:hover {
+            background: #7c3aed;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            border: 2px dashed #d1d5db;
+        }
+
+        .top-products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .product-item:hover {
+            background: #f3f4f6;
+        }
+
+        .product-rank {
+            width: 32px;
+            height: 32px;
+            background: #8b5cf6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.875rem;
+        }
+
+        .product-sales {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .product-amount {
+            font-weight: bold;
+            color: #8b5cf6;
+            font-size: 1rem;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+        }
+
+        .summary-item i {
+            font-size: 32px;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-item.purple i { color: #8b5cf6; }
+        .summary-item.blue i { color: #3b82f6; }
+        .summary-item.green i { color: #10b981; }
+        .summary-item.amber i { color: #d97706; }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin: 0.5rem 0;
+        }
+
+        .summary-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .summary-trend {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .trend-up {
+            color: #10b981;
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-box">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>LicoresTorres</h1>
+                    <p>Reportes y Análisis</p>
+                </div>
+            </div>
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Inicio
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="page-title">
+            <i class="fas fa-chart-bar"></i>
+            Reportes y Análisis
+        </div>
+        <p class="page-subtitle">Genera informes detallados y analiza el rendimiento de tu negocio</p>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label><i class="fas fa-calendar"></i> Período</label>
+                    <select id="periodFilter">
+                        <option value="today">Hoy</option>
+                        <option value="week">Esta Semana</option>
+                        <option value="month" selected>Este Mes</option>
+                        <option value="quarter">Este Trimestre</option>
+                        <option value="year">Este Año</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-calendar-alt"></i> Fecha Inicio</label>
+                    <input type="date" id="startDate" value="2025-11-01">
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-calendar-check"></i> Fecha Fin</label>
+                    <input type="date" id="endDate" value="2025-11-17">
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-tag"></i> Categoría</label>
+                    <select id="categoryFilter">
+                        <option value="all">Todas las Categorías</option>
+                        <option value="cervezas">Cervezas</option>
+                        <option value="vinos">Vinos</option>
+                        <option value="licores">Licores</option>
+                        <option value="whisky">Whisky</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-secondary">
+                    <i class="fas fa-redo"></i>
+                    Limpiar Filtros
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Aplicar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section" style="margin-bottom: 2rem;">
+            <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: bold; margin-bottom: 1.5rem;">
+                <i class="fas fa-chart-line"></i> Resumen del Período
+            </h3>
+            <div class="summary-grid">
+                <div class="summary-item purple">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div class="summary-value">S/ 28,560</div>
+                    <div class="summary-label">Ingresos Totales</div>
+                    <div class="summary-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +18% vs mes anterior
+                    </div>
+                </div>
+                <div class="summary-item blue">
+                    <i class="fas fa-receipt"></i>
+                    <div class="summary-value">342</div>
+                    <div class="summary-label">Ventas Realizadas</div>
+                    <div class="summary-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +12% vs mes anterior
+                    </div>
+                </div>
+                <div class="summary-item green">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="summary-value">S/ 83.51</div>
+                    <div class="summary-label">Ticket Promedio</div>
+                    <div class="summary-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +5% vs mes anterior
+                    </div>
+                </div>
+                <div class="summary-item amber">
+                    <i class="fas fa-box"></i>
+                    <div class="summary-value">1,248</div>
+                    <div class="summary-label">Productos Vendidos</div>
+                    <div class="summary-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> -3% vs mes anterior
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-area"></i>
+                        Ventas por Día
+                    </h3>
+                    <button class="btn-export">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                </div>
+                <div class="chart-placeholder">
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 1rem;"></i>
+                        <p>Gráfico de ventas diarias</p>
+                        <p style="font-size: 0.75rem; margin-top: 0.5rem;">Visualización interactiva de datos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">
+                        <i class="fas fa-trophy"></i>
+                        Top 5 Productos
+                    </h3>
+                </div>
+                <div class="top-products-list">
+                    <div class="product-item">
+                        <div class="product-rank">1</div>
+                        <div class="product-details">
+                            <div class="product-name">Cerveza Pilsen 620ml</div>
+                            <div class="product-sales">156 unidades vendidas</div>
+                        </div>
+                        <div class="product-amount">S/ 546</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-rank">2</div>
+                        <div class="product-details">
+                            <div class="product-name">Cerveza Cusqueña 650ml</div>
+                            <div class="product-sales">132 unidades vendidas</div>
+                        </div>
+                        <div class="product-amount">S/ 528</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-rank">3</div>
+                        <div class="product-details">
+                            <div class="product-name">Vino Tacama Tinto</div>
+                            <div class="product-sales">45 unidades vendidas</div>
+                        </div>
+                        <div class="product-amount">S/ 1,575</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-rank">4</div>
+                        <div class="product-details">
+                            <div class="product-name">Ron Cartavio XO</div>
+                            <div class="product-sales">28 unidades vendidas</div>
+                        </div>
+                        <div class="product-amount">S/ 1,820</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-rank">5</div>
+                        <div class="product-details">
+                            <div class="product-name">Whisky Johnnie Walker Red</div>
+                            <div class="product-sales">34 unidades vendidas</div>
+                        </div>
+                        <div class="product-amount">S/ 1,530</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Cards -->
+        <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">
+            <i class="fas fa-file-alt"></i> Reportes Disponibles
+        </h3>
+        <div class="reports-grid">
+            <!-- Sales Report -->
+            <div class="report-card purple">
+                <div class="report-header">
+                    <div class="report-info">
+                        <h3>Reporte de Ventas</h3>
+                        <p>Análisis detallado de todas las transacciones de venta realizadas</p>
+                    </div>
+                    <div class="report-icon purple">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                </div>
+                <div class="report-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">342</div>
+                        <div class="stat-label">Ventas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">S/ 28.5K</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+                <div class="report-action">
+                    <button class="btn-export" onclick="alert('Exportando reporte de ventas...')">
+                        <i class="fas fa-file-pdf"></i>
+                        PDF
+                    </button>
+                    <button class="btn-export" onclick="alert('Exportando reporte de ventas...')">
+                        <i class="fas fa-file-excel"></i>
+                        Excel
+                    </button>
+                    <button class="btn-view">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Inventory Report -->
+            <div class="report-card blue">
+                <div class="report-header">
+                    <div class="report-info">
+                        <h3>Reporte de Inventario</h3>
+                        <p>Estado actual del stock, productos bajos y movimientos</p>
+                    </div>
+                    <div class="report-icon blue">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                </div>
+                <div class="report-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">248</div>
+                        <div class="stat-label">Productos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Stock Bajo</div>
+                    </div>
+                </div>
+                <div class="report-action">
+                    <button class="btn-export" onclick="alert('Exportando reporte de inventario...')">
+                        <i class="fas fa-file-pdf"></i>
+                        PDF
+                    </button>
+                    <button class="btn-export" onclick="alert('Exportando reporte de inventario...')">
+                        <i class="fas fa-file-excel"></i>
+                        Excel
+                    </button>
+                    <button class="btn-view">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Purchase Report -->
+            <div class="report-card amber">
+                <div class="report-header">
+                    <div class="report-info">
+                        <h3>Reporte de Compras</h3>
+                        <p>Historial de compras a proveedores y análisis de costos</p>
+                    </div>
+                    <div class="report-icon amber">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                </div>
+                <div class="report-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Órdenes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">S/ 12.6K</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+                <div class="report-action">
+                    <button class="btn-export" onclick="alert('Exportando reporte de compras...')">
+                        <i class="fas fa-file-pdf"></i>
+                        PDF
+                    </button>
+                    <button class="btn-export" onclick="alert('Exportando reporte de compras...')">
+                        <i class="fas fa-file-excel"></i>
+                        Excel
+                    </button>
+                    <button class="btn-view">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Financial Report -->
+            <div class="report-card green">
+                <div class="report-header">
+                    <div class="report-info">
+                        <h3>Reporte Financiero</h3>
+                        <p>Balance de ingresos, gastos y utilidades del período</p>
+                    </div>
+                    <div class="report-icon green">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+                <div class="report-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">S/ 28.5K</div>
+                        <div class="stat-label">Ingresos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">S/ 15.9K</div>
+                        <div class="stat-label">Utilidad</div>
+                    </div>
+                </div>
+                <div class="report-action">
+                    <button class="btn-export" onclick="alert('Exportando reporte financiero...')">
+                        <i class="fas fa-file-pdf"></i>
+                        PDF
+                    </button>
+                    <button class="btn-export" onclick="alert('Exportando reporte financiero...')">
+                        <i class="fas fa-file-excel"></i>
+                        Excel
+                    </button>
+                    <button class="btn-view">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product Performance Report -->
+            <div class="report-card purple">
+                <div class="report-header">
+                    <div class="report-info">
+                        <h3>Rendimiento de Productos</h3>
+                        <p>Análisis de rotación, margen
