@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Stock - LicoresTorres</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(to right, #d97706, #b45309);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1rem 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-box {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-box svg {
+            width: 32px;
+            height: 32px;
+            color: #d97706;
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text p {
+            color: #fde68a;
+            font-size: 0.875rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .back-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 1.5rem 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header svg {
+            width: 40px;
+            height: 40px;
+            color: #ef4444;
+        }
+
+        .page-title {
+            color: #1f2937;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 4px solid transparent;
+        }
+
+        .stat-card.red { border-left-color: #ef4444; }
+        .stat-card.yellow { border-left-color: #f59e0b; }
+        .stat-card.green { border-left-color: #10b981; }
+        .stat-card.blue { border-left-color: #3b82f6; }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .stat-icon.red { background: #fee2e2; }
+        .stat-icon.red svg { color: #ef4444; }
+        .stat-icon.yellow { background: #fef3c7; }
+        .stat-icon.yellow svg { color: #f59e0b; }
+        .stat-icon.green { background: #d1fae5; }
+        .stat-icon.green svg { color: #10b981; }
+        .stat-icon.blue { background: #dbeafe; }
+        .stat-icon.blue svg { color: #3b82f6; }
+
+        .stat-info p:first-child {
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .stat-info p:last-child {
+            color: #1f2937;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            width: 18px;
+            height: 18px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #d97706;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            min-width: 180px;
+            background: white;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #d97706;
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title svg {
+            width: 20px;
+            height: 20px;
+            color: #d97706;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f9fafb;
+        }
+
+        th {
+            padding: 0.875rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        th.center { text-align: center; }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        td.center { text-align: center; }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .product-price {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .stock-value {
+            font-size: 1.125rem;
+            font-weight: bold;
+        }
+
+        .stock-value.critical { color: #ef4444; }
+        .stock-value.low { color: #f59e0b; }
+        .stock-value.normal { color: #10b981; }
+
+        .stock-range {
+            color: #9ca3af;
+            font-size: 0.75rem;
+        }
+
+        .stock-bar {
+            width: 100px;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stock-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .stock-bar-fill.critical { background: #ef4444; }
+        .stock-bar-fill.low { background: #f59e0b; }
+        .stock-bar-fill.normal { background: #10b981; }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-critical {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .badge-low {
+            background: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-normal {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+
+        .btn-adjust {
+            background: #d97706;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.3s;
+        }
+
+        .btn-adjust:hover {
+            background: #b45309;
+            transform: translateY(-1px);
+        }
+
+        .btn-adjust svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .alert-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid #ef4444;
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .alert-box svg {
+            color: #ef4444;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        .alert-box h4 {
+            color: #991b1b;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-box p {
+            color: #dc2626;
+            font-size: 0.875rem;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #d97706;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .preview-box {
+            background: #f9fafb;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .preview-box span {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .preview-box strong {
+            color: #d97706;
+            font-size: 1.125rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-confirm {
+            background: #d97706;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: #b45309;
+        }
+
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+            }
+            .search-box, .filter-select {
+                width: 100%;
+            }
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-box">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+                <div class="logo-text">
+                    <h1>LicoresTorres</h1>
+                    <p>Control de Stock</p>
+                </div>
+            </div>
+            <a href="Principal.html" class="back-btn">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Volver al Inicio
+            </a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="page-header">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <h1 class="page-title">Control de Stock</h1>
+        </div>
+        <p class="page-subtitle">Monitorea niveles de inventario</p>
+
+        <div class="stats-row">
+            <div class="stat-card red">
+                <div class="stat-icon red">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="stat-info">
+                    <p>STOCK CRÍTICO</p>
+                    <p id="statCritical">3</p>
+                </div>
+            </div>
+            <div class="stat-card yellow">
+                <div class="stat-icon yellow">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <div class="stat-info">
+                    <p>STOCK BAJO</p>
+                    <p id="statLow">2</p>
+                </div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon green">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="stat-info">
+                    <p>STOCK NORMAL</p>
+                    <p id="statNormal">3</p>
+                </div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-icon blue">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="stat-info">
+                    <p>VALOR INVENTARIO</p>
+                    <p id="statValue">S/ 0.00</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="search-box">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="searchInput" placeholder="Buscar producto...">
+            </div>
+            <select class="filter-select" id="filterCategory">
+                <option value="">Todas las categorías</option>
+                <option value="Cervezas">Cervezas</option>
+                <option value="Vinos">Vinos</option>
+                <option value="Rones">Rones</option>
+                <option value="Piscos">Piscos</option>
+                <option value="Whiskys">Whiskys</option>
+                <option value="Vodkas">Vodkas</option>
+                <option value="Tequilas">Tequilas</option>
+            </select>
+            <select class="filter-select" id="filterStatus">
+                <option value="">Todos los estados</option>
+                <option value="critical">Crítico</option>
+                <option value="low">Bajo</option>
+                <option value="normal">Normal</option>
+            </select>
+        </div>
+
+        <div class="table-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    Inventario de Productos
+                </h2>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th class="center">Stock Actual</th>
+                            <th class="center">Mín / Máx</th>
+                            <th>Nivel</th>
+                            <th class="center">Estado</th>
+                            <th class="center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="alert-box" id="alertBox">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+                <h4>¡Atención! Productos con stock crítico</h4>
+                <p id="alertProducts">Cargando...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 class="modal-title" id="modalTitle">Ajustar Stock</h3>
+            <div class="modal-body">
+                <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">
+                    Stock actual: <strong id="modalCurrentStock">0</strong> unidades
+                </p>
+                <div class="form-group">
+                    <label>Cantidad a ajustar *</label>
+                    <input type="number" id="adjustQuantity" placeholder="Ej: 10 para agregar, -5 para restar">
+                    <p class="form-hint">Use números negativos para reducir stock</p>
+                </div>
+                <div class="form-group">
+                    <label>Motivo del ajuste</label>
+                    <textarea id="adjustReason" rows="3" placeholder="Ingrese el motivo del ajuste..."></textarea>
+                </div>
+                <div class="preview-box">
+                    <span>Nuevo stock: </span>
+                    <strong id="previewStock">0</strong>
+                    <span> unidades</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-confirm" onclick="confirmAdjust()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let productos = [
+            { id: 1, nombre: 'Cerveza Pilsen', categoria: 'Cervezas', stockActual: 5, stockMinimo: 10, stockMaximo: 100, precio: 5.50 },
+            { id: 2, nombre: 'Vino Tacama', categoria: 'Vinos', stockActual: 2, stockMinimo: 5, stockMaximo: 50, precio: 45.00 },
+            { id: 3, nombre: 'Ron Cartavio', categoria: 'Rones', stockActual: 3, stockMinimo: 8, stockMaximo: 60, precio: 35.00 },
+            { id: 4, nombre: 'Pisco Quebranta', categoria: 'Piscos', stockActual: 15, stockMinimo: 10, stockMaximo: 80, precio: 55.00 },
+            { id: 5, nombre: 'Whisky Johnny Walker', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 40, precio: 120.00 },
+            { id: 6, nombre: 'Vodka Absolut', categoria: 'Vodkas', stockActual: 8, stockMinimo: 8, stockMaximo: 30, precio: 75.00 },
+            { id: 7, nombre: 'Cerveza Cusqueña', categoria: 'Cervezas', stockActual: 45, stockMinimo: 15, stockMaximo: 120, precio: 6.00 },
+            { id: 8, nombre: 'Tequila José Cuervo', categoria: 'Tequilas', stockActual: 6, stockMinimo: 5, stockMaximo: 25, precio: 85.00 }
+        ];
+
+        let selectedProduct = null;
+
+        function getStatus(p) {
+            if (p.stockActual <= p.stockMinimo * 0.5) return 'critical';
+            if (p.stockActual <= p.stockMinimo) return 'low';
+            return 'normal';
+        }
+
+        function renderTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('filterCategory').value;
+            const status = document.getElementById('filterStatus').value;
+
+            const filtered = productos.filter(p => {
+                const matchSearch = p.nombre.toLowerCase().includes(search);
+                const matchCategory = !category || p.categoria === category;
+                const matchStatus = !status || getStatus(p) === status;
+                return matchSearch && matchCategory && matchStatus;
+            });
+
+            const tbody = document.getElementById('productTable');
+            tbody.innerHTML = filtered.map(p => {
+                const estado = getStatus(p);
+                const porcentaje = Math.min((p.stockActual / p.stockMaximo) * 100, 100);
+                const estadoTexto = { critical: 'Crítico', low: 'Bajo', normal: 'Normal' };
+                const badgeClass = { critical: 'badge-critical', low: 'badge-low', normal: 'badge-normal' };
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="product-name">${p.nombre}</div>
+                            <div class="product-price">S/ ${p.precio.toFixed(2)} c/u</div>
+                        </td>
+                        <td>${p.categoria}</td>
+                        <td class="center">
+                            <span class="stock-value ${estado}">${p.stockActual}</span>
+                        </td>
+                        <td class="center">
+                            <span class="stock-range">${p.stockMinimo} / ${p.stockMaximo}</span>
+                        </td>
+                        <td>
+                            <div class="stock-bar">
+                                <div class="stock-bar-fill ${estado}" style="width: ${porcentaje}%"></div>
+                            </div>
+                        </td>
+                        <td class="center">
+                            <span class="badge ${badgeClass[estado]}">${estadoTexto[estado]}</span>
+                        </td>
+                        <td class="center">
+                            <button class="btn-adjust" onclick="openModal(${p.id})">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                Ajustar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const critical = productos.filter(p => getStatus(p) === 'critical').length;
+            const low = productos.filter(p => getStatus(p) === 'low').length;
+            const normal = productos.filter(p => getStatus(p) === 'normal').length;
+            const value = productos.reduce((sum, p) => sum + (p.stockActual * p.precio), 0);
+
+            document.getElementById('statCritical').textContent = critical;
+            document.getElementById('statLow').textContent = low;
+            document.getElementById('statNormal').textContent = normal;
+            document.getElementById('statValue').textContent = `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`;
+
+            const criticalProducts = productos.filter(p => getStatus(p) === 'critical');
+            const alertBox = document.getElementById('alertBox');
+            if (criticalProducts.length > 0) {
+                alertBox.style.display = 'flex';
+                document.getElementById('alertProducts').textContent = 
+                    criticalProducts.map(p => p.nombre).join(', ') + ' requieren reabastecimiento inmediato.';
+            } else {
+                alertBox.style.display = 'none';
+            }
+        }
+
+        function openModal(id) {
+            selectedProduct = productos.find(p => p.id === id);
+            document.getElementById('modalTitle').textContent = `Ajustar Stock - ${selectedProduct.nombre}`;
+            document.getElementById('modalCurrentStock').textContent = selectedProduct.stockActual;
+            document.getElementById('adjustQuantity').value = '';
+            document.getElementById('adjustReason').value = '';
+            document.getElementById('previewStock').textContent = selectedProduct.stockActual;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            selectedProduct = null;
+        }
+
+        document.getElementById('adjustQuantity').addEventListener('input', function() {
+            if (selectedProduct) {
+                const adjust = parseInt(this.value) || 0;
+                const newStock = Math.max(0, selectedProduct.stockActual + adjust);
+                document.getElementById('previewStock').textContent = newStock;
+            }
+        });
+
+        function confirmAdjust() {
+            if (!selectedProduct) return;
+            
+            const adjust = parseInt(document.getElementById('adjustQuantity').value) || 0;
+            if (adjust === 0) {
+                alert('Ingrese una cantidad válida');
+                return;
+            }
+
+            const index = productos.findIndex(p => p.id === selectedProduct.id);
+            productos[index].stockActual = Math.max(0, productos[index].stockActual + adjust);
+            
+            closeModal();
+            renderTable();
+            alert('Stock actualizado correctamente');
+        }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', renderTable);
+        document.getElementById('filterCategory').addEventListener('change', renderTable);
+        document.getElementById('filterStatus').addEventListener('change', renderTable);
+
+        renderTable();
+    </script>
+</body>
+</html>
