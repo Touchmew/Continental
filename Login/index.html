@@ -12,28 +12,30 @@
             <img class="logo" src="Imagenes/logo.png" alt="Logo Licores Torres">
         </div>
 
+        <!-- FORMULARIO LOGIN -->
         <div class="form-container" id="loginForm">
             <h2>Iniciar Sesión</h2>
             <form onsubmit="return validarLogin()">
-                <input type="email" placeholder="Correo electrónico" />
-                <input type="password" placeholder="Contraseña" />
+                <input id="correoLogin" type="email" placeholder="Correo electrónico" />
+                <input id="claveLogin" type="password" placeholder="Contraseña" />
                 <button type="submit" class="btn">Ingresar</button>
             </form>
             <p>¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></p>
         </div>
 
+        <!-- FORMULARIO REGISTRO -->
         <div class="form-container oculto" id="registerForm">
             <h2>Crear Cuenta</h2>
-            <form>
-                <input type="text" placeholder="Nombres " required />
-                <input type="text" placeholder="Apellido Paterno" required>
-                <input type="text" placeholder="Apellido Materno" required>
-                <input type="email" placeholder="Correo electrónico" required />
-                <input type="password" placeholder="Contraseña" required />
+            <form onsubmit="return registrarUsuario()">
+                <input id="nombre" type="text" placeholder="Nombres" required />
+                <input id="apellidoP" type="text" placeholder="Apellido Paterno" required>
+                <input id="apellidoM" type="text" placeholder="Apellido Materno" required>
+                <input id="correo" type="email" placeholder="Correo electrónico" required />
+                <input id="clave" type="password" placeholder="Contraseña" required />
                 <label>Fecha de nacimiento:</label>
-                <input type="date" required />
+                <input id="nacimiento" type="date" required />
                 <label>Edad:</label>
-                <input type="number" min="18" max="100" placeholder="Edad" required />
+                <input id="edad" type="number" min="18" max="100" placeholder="Edad" required />
                 <button type="submit" class="btn">Crear cuenta</button>
             </form>
             <p>¿Ya tienes cuenta? <a href="#" onclick="mostrarLogin()">Inicia sesión</a></p>
@@ -41,26 +43,56 @@
     </div>
 
     <script>
+        
+        // MOSTRAR REGISTRO
         function mostrarRegistro() {
             document.getElementById("loginForm").classList.add("oculto");
             document.getElementById("registerForm").classList.remove("oculto");
         }
 
+        // MOSTRAR LOGIN
         function mostrarLogin() {
             document.getElementById("registerForm").classList.add("oculto");
             document.getElementById("loginForm").classList.remove("oculto");
         }
 
+        // REGISTRO FICTICIO SOLO PARA GUARDAR DATOS EN LOCAL
+        function registrarUsuario() {
+            const correo = document.getElementById("correo").value;
+            const clave = document.getElementById("clave").value;
+
+            // Guardamos usuario en localStorage (no usa backend)
+            localStorage.setItem("correoUsuario", correo);
+            localStorage.setItem("claveUsuario", clave);
+
+            alert("Usuario registrado correctamente.");
+            mostrarLogin();
+            return false;
+        }
+
+        // VALIDAR LOGIN
         function validarLogin() {
-            const email = document.querySelector('#loginForm input[type=email]').value;
-            const pass = document.querySelector('#loginForm input[type=password]').value;
+            const email = document.getElementById("correoLogin").value;
+            const pass = document.getElementById("claveLogin").value;
+
+            const correoReg = localStorage.getItem("correoUsuario");
+            const claveReg = localStorage.getItem("claveUsuario");
 
             if (email.trim() === '' || pass.trim() === '') {
-                alert('Debes registrarte para poder iniciar sesión.');
+                alert('Complete todos los campos.');
                 return false;
             }
-            return true;
+
+            if (email !== correoReg || pass !== claveReg) {
+                alert('Correo o contraseña incorrectos.');
+                return false;
+            }
+
+            // REDIRECCIÓN HACIA PRINCIPAL
+            window.location.href = "../InterfazPrincipal/Principal.html";
+            return false;
         }
     </script>
+
 </body>
 </html>
