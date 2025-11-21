@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Control de Stock - LicoresTorres</title>
     <style>
         * {
@@ -21,11 +22,6 @@
             background: linear-gradient(to right, #d97706, #b45309);
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             padding: 1rem 1.5rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
         }
 
         .header-content {
@@ -47,14 +43,10 @@
             padding: 0.5rem;
             border-radius: 0.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .logo-box svg {
-            width: 32px;
-            height: 32px;
+        .logo-box i {
+            font-size: 32px;
             color: #d97706;
         }
 
@@ -81,22 +73,16 @@
             gap: 0.5rem;
             font-size: 0.875rem;
             transition: all 0.3s;
-            text-decoration: none;
         }
 
         .back-btn:hover {
             background: rgba(255,255,255,0.3);
         }
 
-        .back-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 6rem 1.5rem 2rem;
+            padding: 1.5rem;
         }
 
         .page-header {
@@ -120,14 +106,14 @@
 
         .page-subtitle {
             color: #6b7280;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
@@ -576,17 +562,17 @@
         <div class="header-content">
             <div class="logo-section">
                 <div class="logo-box">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    <i class="fas fa-shopping-cart"></i>
                 </div>
                 <div class="logo-text">
                     <h1>LicoresTorres</h1>
                     <p>Control de Stock</p>
                 </div>
             </div>
-            <a href="Principal.html" class="back-btn">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <button class="back-btn" onclick="window.location.href='Principal.html'">
+                <i class="fas fa-arrow-left"></i>
                 Volver al Inicio
-            </a>
+            </button>
         </div>
     </header>
 
@@ -727,13 +713,13 @@
 
     <script>
         let productos = [
-            { id: 1, nombre: 'Cerveza Pilsen', categoria: 'Cervezas', stockActual: 5, stockMinimo: 10, stockMaximo: 100, precio: 5.50 },
-            { id: 2, nombre: 'Vino Tacama', categoria: 'Vinos', stockActual: 2, stockMinimo: 5, stockMaximo: 50, precio: 45.00 },
-            { id: 3, nombre: 'Ron Cartavio', categoria: 'Rones', stockActual: 3, stockMinimo: 8, stockMaximo: 60, precio: 35.00 },
+            { id: 1, nombre: 'Cerveza Pilsen 620ml', categoria: 'Cervezas', stockActual: 5, stockMinimo: 10, stockMaximo: 100, precio: 5.50 },
+            { id: 2, nombre: 'Vino Tacama Tinto', categoria: 'Vinos', stockActual: 2, stockMinimo: 5, stockMaximo: 50, precio: 45.00 },
+            { id: 3, nombre: 'Ron Cartavio XO', categoria: 'Rones', stockActual: 3, stockMinimo: 8, stockMaximo: 60, precio: 35.00 },
             { id: 4, nombre: 'Pisco Quebranta', categoria: 'Piscos', stockActual: 15, stockMinimo: 10, stockMaximo: 80, precio: 55.00 },
-            { id: 5, nombre: 'Whisky Johnny Walker', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 40, precio: 120.00 },
+            { id: 5, nombre: 'Whisky Johnny Walker Red', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 40, precio: 120.00 },
             { id: 6, nombre: 'Vodka Absolut', categoria: 'Vodkas', stockActual: 8, stockMinimo: 8, stockMaximo: 30, precio: 75.00 },
-            { id: 7, nombre: 'Cerveza Cusqueña', categoria: 'Cervezas', stockActual: 45, stockMinimo: 15, stockMaximo: 120, precio: 6.00 },
+            { id: 7, nombre: 'Cerveza Cusqueña 650ml', categoria: 'Cervezas', stockActual: 45, stockMinimo: 15, stockMaximo: 120, precio: 6.00 },
             { id: 8, nombre: 'Tequila José Cuervo', categoria: 'Tequilas', stockActual: 6, stockMinimo: 5, stockMaximo: 25, precio: 85.00 }
         ];
 
