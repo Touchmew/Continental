@@ -85,6 +85,11 @@
     @media(max-width:600px){
       .form-grid{grid-template-columns:1fr}
     }
+    .error-message {
+      color: var(--danger);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -112,15 +117,17 @@
         </div>
         <div>
           <label>Precio (S/):</label>
-          <input type="number" id="precio" step="0.01" required />
+          <input type="text" id="precio" required />
+          <div id="precioError" class="error-message"></div>
         </div>
         <div>
           <label>Cantidad en stock:</label>
-          <input type="number" id="stock" required />
+          <input type="text" id="stock" required />
+          <div id="stockError" class="error-message"></div>
         </div>
       </div>
       <button class="btn" type="submit">Agregar Producto</button>
-      <button class="btn" onclick="window.location.href='Principal.html'" type="submi'">Regresar</button>
+      <button class="btn" onclick="window.location.href='Principal.html'" type="button">Regresar</button>
     </form>
 
     <h2 style="margin-top:25px; color:var(--accent); font-size:1.2rem">Inventario Actual</h2>
@@ -142,28 +149,55 @@
   <script>
     const form = document.getElementById('productForm');
     const tabla = document.getElementById('tablaProductos');
+    const precioInput = document.getElementById('precio');
+    const stockInput = document.getElementById('stock');
+    const precioError = document.getElementById('precioError');
+    const stockError = document.getElementById('stockError');
 
-    form.addEventListener('submit', (e)=>{
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
 
       const nombre = document.getElementById('nombre').value;
       const categoria = document.getElementById('categoria').value;
-      const precio = document.getElementById('precio').value;
-      const stock = document.getElementById('stock').value;
+      const precio = parseFloat(precioInput.value);
+      const stock = parseInt(stockInput.value);
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${nombre}</td>
-        <td>${categoria}</td>
-        <td>S/ ${precio}</td>
-        <td>${stock}</td>
-        <td><button class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button></td>
-      `;
+      // Validación para precio y stock
+      let valid = true;
 
-      tabla.appendChild(row);
-      form.reset();
+      // Limpiar mensajes de error
+      precioError.textContent = '';
+      stockError.textContent = '';
+
+      // Validar que el precio sea un número positivo
+      if (isNaN(precio) || precio < 0) {
+        precioError.textContent = 'El precio debe ser un número positivo.';
+        valid = false;
+      }
+
+      // Validar que el stock sea un número positivo
+      if (isNaN(stock) || stock < 0) {
+        stockError.textContent = 'El stock debe ser un número entero positivo.';
+        valid = false;
+      }
+
+      if (valid) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${nombre}</td>
+          <td>${categoria}</td>
+          <td>S/ ${precio}</td>
+          <td>${stock}</td>
+          <td><button class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button></td>
+        `;
+
+        tabla.appendChild(row);
+        form.reset();
+      }
     });
   </script>
 </body>
 </html>
+
+
 
