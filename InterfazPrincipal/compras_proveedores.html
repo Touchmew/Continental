@@ -448,6 +448,16 @@
             border-radius: 9999px;
             font-size: 0.75rem;
             font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: all 0.3s;
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .badge-success {
@@ -458,6 +468,187 @@
         .badge-warning {
             background: #fef3c7;
             color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            color: #1f2937;
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #1f2937;
+        }
+
+        .modal-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-info {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-info p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+
+        .modal-info strong {
+            color: #1f2937;
+        }
+
+        .status-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .status-option {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-option:hover {
+            border-color: #d97706;
+            background: #fffbeb;
+        }
+
+        .status-option.selected {
+            border-color: #d97706;
+            background: #fffbeb;
+        }
+
+        .status-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .status-label {
+            flex: 1;
+        }
+
+        .status-label .status-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-label .status-desc {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-confirm {
+            background: #d97706;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: #b45309;
         }
 
         @media (max-width: 1024px) {
@@ -517,7 +708,7 @@
                 </div>
                 <div class="stat-info">
                     <p>COMPRAS ESTE MES</p>
-                    <p>S/ 28,560</p>
+                    <p>S/ 12,580</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -574,7 +765,7 @@
                         </div>
                         <div class="form-group">
                             <label>Cantidad *</label>
-                            <input type="number" id="quantity" min="1" max ="99" value="1" required>
+                            <input type="number" id="quantity" min="1" value="1" required>
                         </div>
                         <div class="form-group">
                             <label>Precio Unit.</label>
@@ -661,17 +852,92 @@
                         </tr>
                     </thead>
                     <tbody id="purchaseHistory">
-                       
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Status Change Modal -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-edit"></i>
+                    Cambiar Estado de Orden
+                </h3>
+                <button class="modal-close" onclick="closeStatusModal()">×</button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="modal-info">
+                    <p><strong>Orden:</strong> <span id="modalOrderId"></span></p>
+                    <p><strong>Proveedor:</strong> <span id="modalProvider"></span></p>
+                    <p><strong>Estado Actual:</strong> <span id="modalCurrentStatus"></span></p>
+                </div>
+
+                <div class="status-options">
+                    <label class="status-option">
+                        <input type="radio" name="status" value="pendiente">
+                        <div class="status-label">
+                            <div class="status-name">
+                                <i class="fas fa-clock" style="color: #d97706;"></i>
+                                Pendiente
+                            </div>
+                            <div class="status-desc">La orden está en espera de ser procesada</div>
+                        </div>
+                    </label>
+
+                    <label class="status-option">
+                        <input type="radio" name="status" value="recibida">
+                        <div class="status-label">
+                            <div class="status-name">
+                                <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                                Recibida
+                            </div>
+                            <div class="status-desc">Los productos fueron recibidos correctamente</div>
+                        </div>
+                    </label>
+
+                    <label class="status-option">
+                        <input type="radio" name="status" value="cancelada">
+                        <div class="status-label">
+                            <div class="status-name">
+                                <i class="fas fa-times-circle" style="color: #ef4444;"></i>
+                                Cancelada
+                            </div>
+                            <div class="status-desc">La orden fue cancelada</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" onclick="closeStatusModal()">
+                    Cancelar
+                </button>
+                <button class="btn-modal btn-confirm" onclick="confirmStatusChange()">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let order = [];
-        let purchaseCounter = 3;
+        let purchaseCounter = 1;
         let selectedProvider = null;
+        let currentOrderRow = null;
+        let orders = {}; // Store order data
+
+        // Status option click handlers
+        document.querySelectorAll('.status-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.status-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
 
         // Update provider info
         document.getElementById('providerSelect').addEventListener('change', function() {
@@ -801,17 +1067,35 @@
             const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getFullYear()}`;
             
             const productSummary = order.map(item => `${item.name.split('(')[0].trim()} (${item.quantity})`).join(', ');
+            const orderId = `OC-${purchaseCounter.toString().padStart(4, '0')}`;
+            
+            // Store order data
+            orders[orderId] = {
+                id: orderId,
+                date: dateStr,
+                provider: selectedProvider.name,
+                products: productSummary,
+                total: total,
+                status: 'pendiente'
+            };
             
             // Add to table
             const tbody = document.getElementById('purchaseHistory');
             const newRow = tbody.insertRow(0);
+            newRow.dataset.orderId = orderId;
+            
             newRow.innerHTML = `
-                <td>#OC-${purchaseCounter.toString().padStart(4, '0')}</td>
+                <td>#${orderId}</td>
                 <td>${dateStr}</td>
                 <td>${selectedProvider.name}</td>
                 <td>${productSummary}</td>
                 <td>S/ ${total.toFixed(2)}</td>
-                <td><span class="badge badge-warning">Pendiente</span></td>
+                <td>
+                    <span class="badge badge-warning" onclick="openStatusModal('${orderId}', this.closest('tr'))">
+                        <i class="fas fa-clock"></i>
+                        Pendiente
+                    </span>
+                </td>
             `;
             
             purchaseCounter++;
@@ -825,9 +1109,97 @@
             
             alert('¡Orden de compra registrada exitosamente!');
         });
+
+        // Open status modal
+        function openStatusModal(orderId, row) {
+            currentOrderRow = row;
+            const orderData = orders[orderId];
+            
+            document.getElementById('modalOrderId').textContent = '#' + orderId;
+            document.getElementById('modalProvider').textContent = orderData.provider;
+            
+            // Set current status text and select radio
+            const statusTexts = {
+                'pendiente': 'Pendiente',
+                'recibida': 'Recibida',
+                'cancelada': 'Cancelada'
+            };
+            document.getElementById('modalCurrentStatus').textContent = statusTexts[orderData.status];
+            
+            // Select current status radio
+            const currentRadio = document.querySelector(`input[name="status"][value="${orderData.status}"]`);
+            if (currentRadio) {
+                currentRadio.checked = true;
+                currentRadio.closest('.status-option').classList.add('selected');
+            }
+            
+            document.getElementById('statusModal').classList.add('active');
+        }
+
+        // Close status modal
+        function closeStatusModal() {
+            document.getElementById('statusModal').classList.remove('active');
+            document.querySelectorAll('.status-option').forEach(o => o.classList.remove('selected'));
+            document.querySelectorAll('input[name="status"]').forEach(r => r.checked = false);
+            currentOrderRow = null;
+        }
+
+        // Confirm status change
+        function confirmStatusChange() {
+            const selectedStatus = document.querySelector('input[name="status"]:checked');
+            
+            if (!selectedStatus) {
+                alert('Por favor selecciona un estado');
+                return;
+            }
+            
+            const newStatus = selectedStatus.value;
+            const orderId = document.getElementById('modalOrderId').textContent.replace('#', '');
+            
+            // Update order data
+            orders[orderId].status = newStatus;
+            
+            // Update badge in table
+            const badgeCell = currentOrderRow.cells[5];
+            let badgeClass = '';
+            let badgeIcon = '';
+            let badgeText = '';
+            
+            switch(newStatus) {
+                case 'recibida':
+                    badgeClass = 'badge-success';
+                    badgeIcon = 'fa-check-circle';
+                    badgeText = 'Recibida';
+                    break;
+                case 'pendiente':
+                    badgeClass = 'badge-warning';
+                    badgeIcon = 'fa-clock';
+                    badgeText = 'Pendiente';
+                    break;
+                case 'cancelada':
+                    badgeClass = 'badge-danger';
+                    badgeIcon = 'fa-times-circle';
+                    badgeText = 'Cancelada';
+                    break;
+            }
+            
+            badgeCell.innerHTML = `
+                <span class="badge ${badgeClass}" onclick="openStatusModal('${orderId}', this.closest('tr'))">
+                    <i class="fas ${badgeIcon}"></i>
+                    ${badgeText}
+                </span>
+            `;
+            
+            closeStatusModal();
+            alert(`Estado actualizado a: ${badgeText}`);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('statusModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeStatusModal();
+            }
+        });
     </script>
 </body>
-
 </html>
-
-
