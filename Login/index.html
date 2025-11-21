@@ -21,19 +21,25 @@
                 <button type="submit" class="btn">Ingresar</button>
             </form>
             <p>¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></p>
+
+            <!-- Mostrar contador -->
+            <p id="contadorBloqueo" style="color:red;font-weight:bold;"></p>
         </div>
 
         <!-- FORMULARIO REGISTRO -->
         <div class="form-container oculto" id="registerForm">
             <h2>Crear Cuenta</h2>
             <form onsubmit="return registrarUsuario()">
+                <label>Nombres:</label>
                 <input id="nombre" type="text" placeholder="Nombres" required />
+                <label>Apellido Paterno:</label>
                 <input id="apellidoP" type="text" placeholder="Apellido Paterno" required>
+                <label>Apellido Materno:</label>
                 <input id="apellidoM" type="text" placeholder="Apellido Materno" required>
+                <label>Gmail:</label>
                 <input id="correo" type="email" placeholder="Correo electrónico" required />
+                <label>Contraseña:</label>
                 <input id="clave" type="password" placeholder="Contraseña" required />
-                <label>Fecha de nacimiento:</label>
-                <input id="nacimiento" type="date" required />
                 <label>Edad:</label>
                 <input id="edad" type="number" min="18" max="100" placeholder="Edad" required />
                 <button type="submit" class="btn">Crear cuenta</button>
@@ -43,7 +49,27 @@
     </div>
 
     <script>
-        
+
+        // --------------------------
+        //   VARIABLES DE BLOQUEO
+        // --------------------------
+        let intentos = parseInt(localStorage.getItem("intentosFallidos")) || 0;
+        let bloqueoHasta = parseInt(localStorage.getItem("bloqueoHasta")) || 0;
+        let duracionBloqueo = parseInt(localStorage.getItem("duracionBloqueo")) || 60000; // 1 min = 60000 ms
+
+        function actualizarContador() {
+            const ahora = Date.now();
+            if (bloqueoHasta > ahora) {
+                let restante = Math.ceil((bloqueoHasta - ahora) / 1000);
+                document.getElementById("contadorBloqueo").textContent =
+                    "Acceso bloqueado. Espera " + restante + " segundos...";
+                setTimeout(actualizarContador, 1000);
+            } else {
+                document.getElementById("contadorBloqueo").textContent = "";
+            }
+        }
+        actualizarContador();
+
         // MOSTRAR REGISTRO
         function mostrarRegistro() {
             document.getElementById("loginForm").classList.add("oculto");
@@ -56,12 +82,21 @@
             document.getElementById("loginForm").classList.remove("oculto");
         }
 
-        // REGISTRO FICTICIO SOLO PARA GUARDAR DATOS EN LOCAL
         function registrarUsuario() {
             const correo = document.getElementById("correo").value;
             const clave = document.getElementById("clave").value;
+            const edad = document.getElementById("edad").value;
 
-            // Guardamos usuario en localStorage (no usa backend)
+            if (clave.length < 8) {
+                alert("La contraseña debe tener mínimo 8 caracteres.");
+                return false;
+            }
+
+            if (edad < 18) {
+                alert("Debes tener 18 años o más para registrarte a esta pagina.");
+                return false;
+            }
+
             localStorage.setItem("correoUsuario", correo);
             localStorage.setItem("claveUsuario", clave);
 
@@ -72,6 +107,15 @@
 
         // VALIDAR LOGIN
         function validarLogin() {
+            const ahora = Date.now();
+
+            //  SI ESTÁ BLOQUEADO
+            if (ahora < bloqueoHasta) {
+                alert("Cuenta bloqueada. Espera un momento.");
+                actualizarContador();
+                return false;
+            }
+
             const email = document.getElementById("correoLogin").value;
             const pass = document.getElementById("claveLogin").value;
 
@@ -83,12 +127,38 @@
                 return false;
             }
 
+            //  DATOS INCORRECTOS
             if (email !== correoReg || pass !== claveReg) {
-                alert('Correo o contraseña incorrectos.');
+                intentos++;
+                localStorage.setItem("intentosFallidos", intentos);
+
+                alert('Correo o contraseña incorrectos. Intento ' + intentos + ' de 5.');
+
+                //  BLOQUEO ACTIVADO
+                if (intentos >= 5) {
+                    bloqueoHasta = ahora + duracionBloqueo;
+                    localStorage.setItem("bloqueoHasta", bloqueoHasta);
+
+                    alert("Has sido bloqueado por " + duracionBloqueo / 1000 + " segundos.");
+
+                    //  DUPLICAR TIEMPO DE BLOQUEO (1 → 2 → 4 → 8 min)
+                    duracionBloqueo *= 2;
+                    localStorage.setItem("duracionBloqueo", duracionBloqueo);
+
+                    intentos = 0;
+                    localStorage.setItem("intentosFallidos", intentos);
+
+                    actualizarContador();
+                }
+
                 return false;
             }
 
-            // REDIRECCIÓN HACIA PRINCIPAL
+            // ✔️ LOGIN CORRECTO → REINICIAR TODO
+            localStorage.setItem("duracionBloqueo", 60000);
+            localStorage.removeItem("intentosFallidos");
+            localStorage.removeItem("bloqueoHasta");
+
             window.location.href = "../InterfazPrincipal/Principal.html";
             return false;
         }
