@@ -101,18 +101,26 @@
     <form id="productForm">
       <div class="form-grid">
         <div>
-          <label>Nombre del producto:</label>
-          <input type="text" id="nombre" required />
+          <label>Seleccionar producto:</label>
+          <select id="producto" required>
+            <option value="">Seleccionar producto...</option>
+            <option value="Cerveza Pilsen 620ml">Cerveza Pilsen 620ml</option>
+            <option value="Cerveza Cusqueña 650ml">Cerveza Cusqueña 650ml</option>
+            <option value="Vino Tacama Tinto">Vino Tacama Tinto</option>
+            <option value="Ron Cartavio XO">Ron Cartavio XO</option>
+            <option value="Whisky Johnnie Walker Red">Whisky Johnnie Walker Red</option>
+          </select>
         </div>
         <div>
           <label>Categoría:</label>
-          <select id="categoria">
-            <option>Vinos</option>
-            <option>Cervezas</option>
-            <option>Whisky</option>
-            <option>Ron</option>
-            <option>Pisco</option>
-            <option>Vodka</option>
+          <select id="categoria" required>
+            <option value="">Seleccionar categoría...</option>
+            <option value="Vinos">Vinos</option>
+            <option value="Cervezas">Cervezas</option>
+            <option value="Whisky">Whisky</option>
+            <option value="Ron">Ron</option>
+            <option value="Pisco">Pisco</option>
+            <option value="Vodka">Vodka</option>
           </select>
         </div>
         <div>
@@ -198,6 +206,7 @@
   </script>
 </body>
 </html>
+
 
 
 
