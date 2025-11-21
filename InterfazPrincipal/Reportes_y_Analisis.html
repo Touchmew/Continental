@@ -113,7 +113,21 @@
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             padding: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-title {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-title i {
+            color: #8b5cf6;
         }
 
         .filter-grid {
@@ -123,37 +137,31 @@
             margin-bottom: 1rem;
         }
 
-        .filter-group {
+        .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
         }
 
-        .filter-group label {
+        .form-group label {
             color: #374151;
             font-weight: 500;
+            margin-bottom: 0.5rem;
             font-size: 0.875rem;
         }
 
-        .filter-group select,
-        .filter-group input {
+        .form-group select,
+        .form-group input {
             padding: 0.75rem;
             border: 1px solid #d1d5db;
             border-radius: 0.5rem;
-            font-size: 0.875rem;
+            font-size: 1rem;
         }
 
-        .filter-group select:focus,
-        .filter-group input:focus {
+        .form-group select:focus,
+        .form-group input:focus {
             outline: none;
             border-color: #8b5cf6;
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
         }
 
         .btn {
@@ -167,7 +175,6 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            font-size: 0.875rem;
         }
 
         .btn-primary {
@@ -182,18 +189,24 @@
         }
 
         .btn-secondary {
-            background: #6b7280;
+            background: #10b981;
             color: white;
         }
 
         .btn-secondary:hover {
-            background: #4b5563;
+            background: #059669;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
         }
 
         /* Report Cards Grid */
         .reports-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -235,121 +248,100 @@
 
         .report-header {
             display: flex;
-            justify-content: space-between;
-            align-items: start;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
 
         .report-icon {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             border-radius: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .report-icon.purple { background: #ede9fe; }
-        .report-icon.blue { background: #dbeafe; }
-        .report-icon.green { background: #d1fae5; }
-        .report-icon.amber { background: #fef3c7; }
+        .report-icon.purple {
+            background: #ede9fe;
+        }
+
+        .report-icon.blue {
+            background: #dbeafe;
+        }
+
+        .report-icon.green {
+            background: #d1fae5;
+        }
+
+        .report-icon.amber {
+            background: #fef3c7;
+        }
 
         .report-icon i {
-            font-size: 28px;
+            font-size: 24px;
         }
 
-        .report-icon.purple i { color: #8b5cf6; }
-        .report-icon.blue i { color: #3b82f6; }
-        .report-icon.green i { color: #10b981; }
-        .report-icon.amber i { color: #d97706; }
+        .report-icon.purple i {
+            color: #8b5cf6;
+        }
 
-        .report-info h3 {
+        .report-icon.blue i {
+            color: #3b82f6;
+        }
+
+        .report-icon.green i {
+            color: #10b981;
+        }
+
+        .report-icon.amber i {
+            color: #d97706;
+        }
+
+        .report-title {
+            flex: 1;
+        }
+
+        .report-title h3 {
             color: #1f2937;
-            font-size: 1.125rem;
             font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
         }
 
-        .report-info p {
+        .report-title p {
             color: #6b7280;
             font-size: 0.875rem;
-            line-height: 1.4;
         }
 
         .report-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e5e7eb;
+            gap: 0.75rem;
         }
 
         .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1f2937;
+            background: #f9fafb;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
         }
 
         .stat-label {
-            font-size: 0.75rem;
             color: #6b7280;
-            margin-top: 0.25rem;
-        }
-
-        .report-action {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-export {
-            background: none;
-            border: 1px solid #d1d5db;
-            color: #6b7280;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
             font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
-        .btn-export:hover {
-            background: #f9fafb;
-            border-color: #8b5cf6;
-            color: #8b5cf6;
-        }
-
-        .btn-view {
-            background: #8b5cf6;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .btn-view:hover {
-            background: #7c3aed;
+        .stat-value {
+            color: #1f2937;
+            font-size: 1.25rem;
+            font-weight: bold;
         }
 
         /* Charts Section */
         .charts-section {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -361,149 +353,115 @@
             padding: 1.5rem;
         }
 
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
         .chart-title {
             color: #1f2937;
             font-size: 1.125rem;
             font-weight: bold;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        .chart-title i {
+            color: #8b5cf6;
+        }
+
         .chart-placeholder {
-            height: 300px;
-            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+            background: linear-gradient(to bottom, #faf5ff, #f3f4f6);
+            border: 2px dashed #d1d5db;
             border-radius: 0.5rem;
+            height: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #9ca3af;
-            border: 2px dashed #d1d5db;
-        }
-
-        .top-products-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .product-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: #f9fafb;
-            border-radius: 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .product-item:hover {
-            background: #f3f4f6;
-        }
-
-        .product-rank {
-            width: 32px;
-            height: 32px;
-            background: #8b5cf6;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
             font-size: 0.875rem;
         }
 
-        .product-details {
-            flex: 1;
-        }
-
-        .product-name {
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 0.875rem;
-        }
-
-        .product-sales {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-
-        .product-amount {
-            font-weight: bold;
-            color: #8b5cf6;
-            font-size: 1rem;
-        }
-
-        /* Summary Section */
-        .summary-section {
+        /* Top Products Table */
+        .top-products-section {
             background: white;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             padding: 1.5rem;
         }
 
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .summary-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: #f9fafb;
-            border-radius: 0.5rem;
-        }
-
-        .summary-item i {
-            font-size: 32px;
-            margin-bottom: 0.5rem;
-        }
-
-        .summary-item.purple i { color: #8b5cf6; }
-        .summary-item.blue i { color: #3b82f6; }
-        .summary-item.green i { color: #10b981; }
-        .summary-item.amber i { color: #d97706; }
-
-        .summary-value {
-            font-size: 2rem;
-            font-weight: bold;
+        .section-title {
             color: #1f2937;
-            margin: 0.5rem 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .summary-label {
+        .section-title i {
+            color: #8b5cf6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f9fafb;
+        }
+
+        th {
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
             color: #6b7280;
             font-size: 0.875rem;
         }
 
-        .summary-trend {
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
+        tbody tr:hover {
+            background: #f9fafb;
         }
 
-        .trend-up {
-            color: #10b981;
+        .product-rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
         }
 
-        .trend-down {
-            color: #ef4444;
+        .rank-1 { background: #fbbf24; }
+        .rank-2 { background: #94a3b8; }
+        .rank-3 { background: #cd7f32; }
+        .rank-other { background: #8b5cf6; }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #8b5cf6, #a78bfa);
+            border-radius: 9999px;
         }
 
         @media (max-width: 1024px) {
             .charts-section {
-                grid-template-columns: 1fr;
-            }
-
-            .reports-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -536,7 +494,7 @@
                     <p>Reportes y Análisis</p>
                 </div>
             </div>
-            <button class="back-btn" onclick="window.location.href='Principal.html'">
+            <button class="back-btn" onclick="window.location.href='index.html'">
                 <i class="fas fa-arrow-left"></i>
                 Volver al Inicio
             </button>
@@ -553,10 +511,15 @@
 
         <!-- Filter Section -->
         <div class="filter-section">
+            <div class="filter-title">
+                <i class="fas fa-filter"></i>
+                Filtros de Reporte
+            </div>
+
             <div class="filter-grid">
-                <div class="filter-group">
-                    <label><i class="fas fa-calendar"></i> Período</label>
-                    <select id="periodFilter">
+                <div class="form-group">
+                    <label>Período</label>
+                    <select id="period">
                         <option value="today">Hoy</option>
                         <option value="week">Esta Semana</option>
                         <option value="month" selected>Este Mes</option>
@@ -565,309 +528,372 @@
                         <option value="custom">Personalizado</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label><i class="fas fa-calendar-alt"></i> Fecha Inicio</label>
+
+                <div class="form-group">
+                    <label>Fecha Inicio</label>
                     <input type="date" id="startDate" value="2025-11-01">
                 </div>
-                <div class="filter-group">
-                    <label><i class="fas fa-calendar-check"></i> Fecha Fin</label>
-                    <input type="date" id="endDate" value="2025-11-17">
+
+                <div class="form-group">
+                    <label>Fecha Fin</label>
+                    <input type="date" id="endDate" value="2025-11-21">
                 </div>
-                <div class="filter-group">
-                    <label><i class="fas fa-tag"></i> Categoría</label>
-                    <select id="categoryFilter">
-                        <option value="all">Todas las Categorías</option>
-                        <option value="cervezas">Cervezas</option>
-                        <option value="vinos">Vinos</option>
-                        <option value="licores">Licores</option>
-                        <option value="whisky">Whisky</option>
+
+                <div class="form-group">
+                    <label>Tipo de Reporte</label>
+                    <select id="reportType">
+                        <option value="all">Todos</option>
+                        <option value="sales">Ventas</option>
+                        <option value="purchases">Compras</option>
+                        <option value="inventory">Inventario</option>
+                        <option value="financial">Financiero</option>
                     </select>
                 </div>
             </div>
+
             <div class="filter-actions">
-                <button class="btn btn-secondary">
-                    <i class="fas fa-redo"></i>
-                    Limpiar Filtros
-                </button>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" onclick="applyFilters()">
                     <i class="fas fa-search"></i>
                     Aplicar Filtros
                 </button>
-            </div>
-        </div>
-
-        <!-- Summary Section -->
-        <div class="summary-section" style="margin-bottom: 2rem;">
-            <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: bold; margin-bottom: 1.5rem;">
-                <i class="fas fa-chart-line"></i> Resumen del Período
-            </h3>
-            <div class="summary-grid">
-                <div class="summary-item purple">
-                    <i class="fas fa-dollar-sign"></i>
-                    <div class="summary-value">S/ 28,560</div>
-                    <div class="summary-label">Ingresos Totales</div>
-                    <div class="summary-trend trend-up">
-                        <i class="fas fa-arrow-up"></i> +18% vs mes anterior
-                    </div>
-                </div>
-                <div class="summary-item blue">
-                    <i class="fas fa-receipt"></i>
-                    <div class="summary-value">342</div>
-                    <div class="summary-label">Ventas Realizadas</div>
-                    <div class="summary-trend trend-up">
-                        <i class="fas fa-arrow-up"></i> +12% vs mes anterior
-                    </div>
-                </div>
-                <div class="summary-item green">
-                    <i class="fas fa-chart-line"></i>
-                    <div class="summary-value">S/ 83.51</div>
-                    <div class="summary-label">Ticket Promedio</div>
-                    <div class="summary-trend trend-up">
-                        <i class="fas fa-arrow-up"></i> +5% vs mes anterior
-                    </div>
-                </div>
-                <div class="summary-item amber">
-                    <i class="fas fa-box"></i>
-                    <div class="summary-value">1,248</div>
-                    <div class="summary-label">Productos Vendidos</div>
-                    <div class="summary-trend trend-down">
-                        <i class="fas fa-arrow-down"></i> -3% vs mes anterior
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Section -->
-        <div class="charts-section">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">
-                        <i class="fas fa-chart-area"></i>
-                        Ventas por Día
-                    </h3>
-                    <button class="btn-export">
-                        <i class="fas fa-download"></i>
-                        Exportar
-                    </button>
-                </div>
-                <div class="chart-placeholder">
-                    <div style="text-align: center;">
-                        <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 1rem;"></i>
-                        <p>Gráfico de ventas diarias</p>
-                        <p style="font-size: 0.75rem; margin-top: 0.5rem;">Visualización interactiva de datos</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">
-                        <i class="fas fa-trophy"></i>
-                        Top 5 Productos
-                    </h3>
-                </div>
-                <div class="top-products-list">
-                    <div class="product-item">
-                        <div class="product-rank">1</div>
-                        <div class="product-details">
-                            <div class="product-name">Cerveza Pilsen 620ml</div>
-                            <div class="product-sales">156 unidades vendidas</div>
-                        </div>
-                        <div class="product-amount">S/ 546</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-rank">2</div>
-                        <div class="product-details">
-                            <div class="product-name">Cerveza Cusqueña 650ml</div>
-                            <div class="product-sales">132 unidades vendidas</div>
-                        </div>
-                        <div class="product-amount">S/ 528</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-rank">3</div>
-                        <div class="product-details">
-                            <div class="product-name">Vino Tacama Tinto</div>
-                            <div class="product-sales">45 unidades vendidas</div>
-                        </div>
-                        <div class="product-amount">S/ 1,575</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-rank">4</div>
-                        <div class="product-details">
-                            <div class="product-name">Ron Cartavio XO</div>
-                            <div class="product-sales">28 unidades vendidas</div>
-                        </div>
-                        <div class="product-amount">S/ 1,820</div>
-                    </div>
-                    <div class="product-item">
-                        <div class="product-rank">5</div>
-                        <div class="product-details">
-                            <div class="product-name">Whisky Johnnie Walker Red</div>
-                            <div class="product-sales">34 unidades vendidas</div>
-                        </div>
-                        <div class="product-amount">S/ 1,530</div>
-                    </div>
-                </div>
+                <button class="btn btn-secondary" onclick="exportReport()">
+                    <i class="fas fa-download"></i>
+                    Exportar a Excel
+                </button>
             </div>
         </div>
 
         <!-- Report Cards -->
-        <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">
-            <i class="fas fa-file-alt"></i> Reportes Disponibles
-        </h3>
         <div class="reports-grid">
-            <!-- Sales Report -->
             <div class="report-card purple">
                 <div class="report-header">
-                    <div class="report-info">
-                        <h3>Reporte de Ventas</h3>
-                        <p>Análisis detallado de todas las transacciones de venta realizadas</p>
-                    </div>
                     <div class="report-icon purple">
-                        <i class="fas fa-shopping-cart"></i>
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="report-title">
+                        <h3>Ventas Totales</h3>
+                        <p>Noviembre 2025</p>
                     </div>
                 </div>
                 <div class="report-stats">
                     <div class="stat-item">
-                        <div class="stat-value">342</div>
-                        <div class="stat-label">Ventas</div>
+                        <div class="stat-label">Total Ventas</div>
+                        <div class="stat-value">S/ 28,560</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">S/ 28.5K</div>
-                        <div class="stat-label">Total</div>
+                        <div class="stat-label">Transacciones</div>
+                        <div class="stat-value">156</div>
                     </div>
-                </div>
-                <div class="report-action">
-                    <button class="btn-export" onclick="alert('Exportando reporte de ventas...')">
-                        <i class="fas fa-file-pdf"></i>
-                        PDF
-                    </button>
-                    <button class="btn-export" onclick="alert('Exportando reporte de ventas...')">
-                        <i class="fas fa-file-excel"></i>
-                        Excel
-                    </button>
-                    <button class="btn-view">
-                        <i class="fas fa-eye"></i>
-                        Ver Detalle
-                    </button>
+                    <div class="stat-item">
+                        <div class="stat-label">Ticket Promedio</div>
+                        <div class="stat-value">S/ 183</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Crecimiento</div>
+                        <div class="stat-value" style="color: #10b981;">+18%</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Inventory Report -->
             <div class="report-card blue">
                 <div class="report-header">
-                    <div class="report-info">
-                        <h3>Reporte de Inventario</h3>
-                        <p>Estado actual del stock, productos bajos y movimientos</p>
-                    </div>
                     <div class="report-icon blue">
-                        <i class="fas fa-boxes"></i>
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="report-title">
+                        <h3>Productos Vendidos</h3>
+                        <p>Noviembre 2025</p>
                     </div>
                 </div>
                 <div class="report-stats">
                     <div class="stat-item">
-                        <div class="stat-value">248</div>
-                        <div class="stat-label">Productos</div>
+                        <div class="stat-label">Unidades</div>
+                        <div class="stat-value">1,247</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Stock Bajo</div>
+                        <div class="stat-label">Categorías</div>
+                        <div class="stat-value">8</div>
                     </div>
-                </div>
-                <div class="report-action">
-                    <button class="btn-export" onclick="alert('Exportando reporte de inventario...')">
-                        <i class="fas fa-file-pdf"></i>
-                        PDF
-                    </button>
-                    <button class="btn-export" onclick="alert('Exportando reporte de inventario...')">
-                        <i class="fas fa-file-excel"></i>
-                        Excel
-                    </button>
-                    <button class="btn-view">
-                        <i class="fas fa-eye"></i>
-                        Ver Detalle
-                    </button>
+                    <div class="stat-item">
+                        <div class="stat-label">Más Vendido</div>
+                        <div class="stat-value" style="font-size: 0.875rem;">Cerveza Pilsen</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Rotación</div>
+                        <div class="stat-value">89%</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Purchase Report -->
+            <div class="report-card green">
+                <div class="report-header">
+                    <div class="report-icon green">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="report-title">
+                        <h3>Inventario Actual</h3>
+                        <p>Actualizado hoy</p>
+                    </div>
+                </div>
+                <div class="report-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Productos</div>
+                        <div class="stat-value">248</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Valor Total</div>
+                        <div class="stat-value">S/ 45,890</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Stock Bajo</div>
+                        <div class="stat-value" style="color: #ef4444;">3</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Stock OK</div>
+                        <div class="stat-value" style="color: #10b981;">245</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="report-card amber">
                 <div class="report-header">
-                    <div class="report-info">
-                        <h3>Reporte de Compras</h3>
-                        <p>Historial de compras a proveedores y análisis de costos</p>
-                    </div>
                     <div class="report-icon amber">
                         <i class="fas fa-truck"></i>
                     </div>
+                    <div class="report-title">
+                        <h3>Compras a Proveedores</h3>
+                        <p>Noviembre 2025</p>
+                    </div>
                 </div>
                 <div class="report-stats">
                     <div class="stat-item">
-                        <div class="stat-value">24</div>
+                        <div class="stat-label">Total Compras</div>
+                        <div class="stat-value">S/ 12,580</div>
+                    </div>
+                    <div class="stat-item">
                         <div class="stat-label">Órdenes</div>
+                        <div class="stat-value">24</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">S/ 12.6K</div>
-                        <div class="stat-label">Total</div>
+                        <div class="stat-label">Proveedores</div>
+                        <div class="stat-value">8</div>
                     </div>
-                </div>
-                <div class="report-action">
-                    <button class="btn-export" onclick="alert('Exportando reporte de compras...')">
-                        <i class="fas fa-file-pdf"></i>
-                        PDF
-                    </button>
-                    <button class="btn-export" onclick="alert('Exportando reporte de compras...')">
-                        <i class="fas fa-file-excel"></i>
-                        Excel
-                    </button>
-                    <button class="btn-view">
-                        <i class="fas fa-eye"></i>
-                        Ver Detalle
-                    </button>
+                    <div class="stat-item">
+                        <div class="stat-label">Pendientes</div>
+                        <div class="stat-value" style="color: #d97706;">3</div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Financial Report -->
-            <div class="report-card green">
-                <div class="report-header">
-                    <div class="report-info">
-                        <h3>Reporte Financiero</h3>
-                        <p>Balance de ingresos, gastos y utilidades del período</p>
-                    </div>
-                    <div class="report-icon green">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                </div>
-                <div class="report-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">S/ 28.5K</div>
-                        <div class="stat-label">Ingresos</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">S/ 15.9K</div>
-                        <div class="stat-label">Utilidad</div>
-                    </div>
-                </div>
-                <div class="report-action">
-                    <button class="btn-export" onclick="alert('Exportando reporte financiero...')">
-                        <i class="fas fa-file-pdf"></i>
-                        PDF
-                    </button>
-                    <button class="btn-export" onclick="alert('Exportando reporte financiero...')">
-                        <i class="fas fa-file-excel"></i>
-                        Excel
-                    </button>
-                    <button class="btn-view">
-                        <i class="fas fa-eye"></i>
-                        Ver Detalle
-                    </button>
-                </div>
-            </div>
+        <!-- Top Products Table -->
+        <div class="top-products-section">
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                Top 10 Productos Más Vendidos
+            </h2>
 
-            <!-- Product Performance Report -->
-            <div class="report-card purple">
-                <div class="report-header">
-                    <div class="report-info">
-                        <h3>Rendimiento de Productos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ranking</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Unidades Vendidas</th>
+                        <th>Ingresos</th>
+                        <th>Participación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-1">1</div>
+                        </td>
+                        <td><strong>Cerveza Pilsen 620ml</strong></td>
+                        <td>Cervezas</td>
+                        <td>342 unidades</td>
+                        <td><strong>S/ 1,197.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-2">2</div>
+                        </td>
+                        <td><strong>Cerveza Cusqueña 650ml</strong></td>
+                        <td>Cervezas</td>
+                        <td>278 unidades</td>
+                        <td><strong>S/ 1,112.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-3">3</div>
+                        </td>
+                        <td><strong>Vino Tacama Tinto</strong></td>
+                        <td>Vinos</td>
+                        <td>156 unidades</td>
+                        <td><strong>S/ 5,460.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 70%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">4</div>
+                        </td>
+                        <td><strong>Ron Cartavio XO</strong></td>
+                        <td>Licores</td>
+                        <td>89 unidades</td>
+                        <td><strong>S/ 5,785.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 55%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">5</div>
+                        </td>
+                        <td><strong>Whisky Johnnie Walker Red</strong></td>
+                        <td>Whisky</td>
+                        <td>67 unidades</td>
+                        <td><strong>S/ 3,015.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">6</div>
+                        </td>
+                        <td><strong>Pisco Quebranta</strong></td>
+                        <td>Pisco</td>
+                        <td>54 unidades</td>
+                        <td><strong>S/ 1,890.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 38%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">7</div>
+                        </td>
+                        <td><strong>Vodka Absolut</strong></td>
+                        <td>Vodka</td>
+                        <td>42 unidades</td>
+                        <td><strong>S/ 1,680.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">8</div>
+                        </td>
+                        <td><strong>Cerveza Corona Extra</strong></td>
+                        <td>Cervezas</td>
+                        <td>38 unidades</td>
+                        <td><strong>S/ 228.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 25%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">9</div>
+                        </td>
+                        <td><strong>Gin Bombay Sapphire</strong></td>
+                        <td>Gin</td>
+                        <td>31 unidades</td>
+                        <td><strong>S/ 1,395.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 20%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-rank rank-other">10</div>
+                        </td>
+                        <td><strong>Champagne Moët & Chandon</strong></td>
+                        <td>Espumantes</td>
+                        <td>18 unidades</td>
+                        <td><strong>S/ 2,340.00</strong></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 15%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-                        <p>Análisis de rotación, margen
+    <script>
+        function applyFilters() {
+            const period = document.getElementById('period').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const reportType = document.getElementById('reportType').value;
+
+            alert(`Filtrando reportes:\n\nPeríodo: ${period}\nFecha Inicio: ${startDate}\nFecha Fin: ${endDate}\nTipo: ${reportType}\n\nLos gráficos se actualizarían con los nuevos datos.`);
+        }
+
+        function exportReport() {
+            alert('Exportando reporte a Excel...\n\nEl archivo se descargará con:\n- Datos de ventas\n- Inventario actual\n- Top productos\n- Gráficos incluidos');
+        }
+
+        // Set today's date as default for end date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('endDate').value = today;
+
+        // Update dates when period changes
+        document.getElementById('period').addEventListener('change', function() {
+            const period = this.value;
+            const endDate = new Date();
+            let startDate = new Date();
+
+            switch(period) {
+                case 'today':
+                    startDate = new Date();
+                    break;
+                case 'week':
+                    startDate.setDate(endDate.getDate() - 7);
+                    break;
+                case 'month':
+                    startDate.setMonth(endDate.getMonth() - 1);
+                    break;
+                case 'quarter':
+                    startDate.setMonth(endDate.getMonth() - 3);
+                    break;
+                case 'year':
+                    startDate.setFullYear(endDate.getFullYear() - 1);
+                    break;
+            }
+
+            if (period !== 'custom') {
+                document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+                document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+            }
+        });
