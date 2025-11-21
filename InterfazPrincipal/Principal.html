@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -345,22 +344,27 @@
             background: #eff6ff; 
             border-color: #93c5fd;
         }
+
         .module-card.green:hover { 
             background: #f0fdf4; 
             border-color: #86efac;
         }
+
         .module-card.amber:hover { 
             background: #fffbeb; 
             border-color: #fcd34d;
         }
+
         .module-card.red:hover { 
             background: #fef2f2; 
             border-color: #fca5a5;
         }
+
         .module-card.purple:hover { 
             background: #faf5ff; 
             border-color: #c4b5fd;
         }
+
         .module-card.gray:hover { 
             background: #f9fafb; 
             border-color: #d1d5db;
@@ -424,9 +428,88 @@
         .hidden {
             display: none;
         }
+
+        /* --- MODO OSCURO --- */
+        .darkmode-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .darkmode-btn i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .dark-mode {
+            background: #111827 !important;
+            color: #f9fafb !important;
+        }
+
+        .dark-mode body {
+            background: #111827 !important;
+        }
+
+        .dark-mode header {
+            background: linear-gradient(to right, #020617, #111827) !important;
+        }
+
+        .dark-mode .logo-box {
+            background: #111827;
+        }
+
+        .dark-mode .logo-box i {
+            color: #f59e0b;
+        }
+
+        .dark-mode .search-box,
+        .dark-mode .stat-card,
+        .dark-mode .module-card,
+        .dark-mode footer {
+            background: #1f2937 !important;
+            color: #f9fafb !important;
+        }
+
+        .dark-mode .modules-title {
+            color: #e5e7eb;
+        }
+
+        .dark-mode .module-text h3,
+        .dark-mode .module-text p,
+        .dark-mode .stat-info p:first-child,
+        .dark-mode .stat-info p:nth-child(2),
+        .dark-mode .stat-info p:last-child,
+        .dark-mode footer p {
+            color: #e5e7eb !important;
+        }
+
+        .dark-mode .search-input-wrapper input {
+            background: #111827;
+            color: #e5e7eb;
+            border-color: #4b5563;
+        }
+
+        .dark-mode .search-input-wrapper i {
+            color: #9ca3af;
+        }
+
+        .dark-mode .alert {
+            background: #7f1d1d !important;
+            border-left-color: #dc2626 !important;
+        }
+
+        .dark-mode .alert-content h3 {
+            color: #fee2e2 !important;
+        }
+
+        .dark-mode .alert-content p {
+            color: #fecaca !important;
+        }
+
     </style>
 </head>
 <body>
+
     <!-- Header -->
     <header>
         <div class="header-content">
@@ -445,6 +528,12 @@
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </div>
+
+                <!-- Botón modo oscuro -->
+                <button class="darkmode-btn" onclick="toggleDarkMode()">
+                    <i id="darkIcon" class="fas fa-moon"></i>
+                </button>
+
                 <div class="user-info">
                     <div class="user-avatar">AT</div>
                     <div class="user-details">
@@ -452,12 +541,16 @@
                         <p>Administrador</p>
                     </div>
                 </div>
-                <button class="logout-btn">
+
+                <!-- BOTÓN SALIR → LOGIN -->
+                <button class="logout-btn" onclick="window.location.href='login/index.html'">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
+
             </div>
         </div>
     </header>
+
 
     <!-- Alert -->
     <div class="alert-container">
@@ -491,9 +584,7 @@
                         <p>248</p>
                         <p class="positive">↑ 12 nuevos</p>
                     </div>
-                    <div class="stat-icon blue">
-                        <i class="fas fa-box"></i>
-                    </div>
+                    <div class="stat-icon blue"><i class="fas fa-box"></i></div>
                 </div>
             </div>
 
@@ -504,9 +595,7 @@
                         <p>S/ 1,450</p>
                         <p class="positive">32 transacciones</p>
                     </div>
-                    <div class="stat-icon green">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
+                    <div class="stat-icon green"><i class="fas fa-chart-line"></i></div>
                 </div>
             </div>
 
@@ -517,9 +606,7 @@
                         <p>3</p>
                         <p class="negative">Requiere atención</p>
                     </div>
-                    <div class="stat-icon red">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
+                    <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
                 </div>
             </div>
 
@@ -530,9 +617,7 @@
                         <p>S/ 28,560</p>
                         <p class="positive">↑ 18% vs anterior</p>
                     </div>
-                    <div class="stat-icon purple">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
+                    <div class="stat-icon purple"><i class="fas fa-file-alt"></i></div>
                 </div>
             </div>
         </div>
@@ -542,11 +627,10 @@
     <div class="modules-container">
         <h2 class="modules-title">Módulos del Sistema</h2>
         <div class="modules-grid">
+            
             <button class="module-card blue" onclick="window.location.href='gestion_de_productos.html'">
                 <div class="module-content">
-                    <div class="module-icon blue">
-                        <i class="fas fa-box"></i>
-                    </div>
+                    <div class="module-icon blue"><i class="fas fa-box"></i></div>
                     <div class="module-text">
                         <h3>Gestión de Productos</h3>
                         <p>Registrar y administrar inventario</p>
@@ -554,11 +638,9 @@
                 </div>
             </button>
 
-           <button class="module-card green" onclick="window.location.href='registro_ventas.html'">
+            <button class="module-card green" onclick="window.location.href='registro_ventas.html'">
                 <div class="module-content">
-                    <div class="module-icon green">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
+                    <div class="module-icon green"><i class="fas fa-shopping-cart"></i></div>
                     <div class="module-text">
                         <h3>Registro de Ventas</h3>
                         <p>Registrar operaciones de venta</p>
@@ -568,9 +650,7 @@
 
             <button class="module-card amber" onclick="window.location.href='compras_proveedores.html'">
                 <div class="module-content">
-                    <div class="module-icon amber">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
+                    <div class="module-icon amber"><i class="fas fa-chart-line"></i></div>
                     <div class="module-text">
                         <h3>Compras a Proveedores</h3>
                         <p>Gestionar pedidos y compras</p>
@@ -580,9 +660,7 @@
 
             <button class="module-card red" onclick="window.location.href='control_de_Stock.html'">
                 <div class="module-content">
-                    <div class="module-icon red">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
+                    <div class="module-icon red"><i class="fas fa-exclamation-triangle"></i></div>
                     <div class="module-text">
                         <h3>Control de Stock</h3>
                         <p>Monitorear niveles de inventario</p>
@@ -592,26 +670,24 @@
 
             <button class="module-card purple" onclick="window.location.href='Reportes_y_Analisis.html'">
                 <div class="module-content">
-                    <div class="module-icon purple">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
+                    <div class="module-icon purple"><i class="fas fa-file-alt"></i></div>
                     <div class="module-text">
                         <h3>Reportes y Análisis</h3>
                         <p>Generar informes detallados</p>
                     </div>
                 </div>
             </button>
+
             <button class="module-card gray">
                 <div class="module-content">
-                    <div class="module-icon gray">
-                        <i data-lucide="settings"></i>
-                    </div>
+                    <div class="module-icon gray"><i data-lucide="settings"></i></div>
                     <div class="module-text">
                         <h3>Configuración</h3>
                         <p>Ajustes del sistema y seguridad</p>
                     </div>
                 </div>
             </button>
+
         </div>
     </div>
 
@@ -622,7 +698,26 @@
 
     <script>
         // Inicializar íconos de Lucide
-        lucide.createIcons();
+        if (typeof lucide !== "undefined") {
+            lucide.createIcons();
+        }
+
+        let darkMode = false;
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.documentElement.classList.toggle('dark-mode', darkMode);
+
+            const icon = document.getElementById('darkIcon');
+            if (darkMode) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
     </script>
+
 </body>
 </html>
