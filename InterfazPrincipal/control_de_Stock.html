@@ -579,7 +579,7 @@
     <div class="main-container">
         <div class="page-header">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <h1 class="page-title">Control de Stock</h1>
+            <h1 class="page-title">Control de Inventario</h1>
         </div>
         <p class="page-subtitle">Monitorea niveles de inventario</p>
 
@@ -711,148 +711,173 @@
         </div>
     </div>
 
-    <script>
-        let productos = [
-            { id: 1, nombre: 'Cerveza Pilsen 620ml', categoria: 'Cervezas', stockActual: 5, stockMinimo: 10, stockMaximo: 100, precio: 5.50 },
-            { id: 2, nombre: 'Vino Tacama Tinto', categoria: 'Vinos', stockActual: 2, stockMinimo: 5, stockMaximo: 50, precio: 45.00 },
-            { id: 3, nombre: 'Ron Cartavio XO', categoria: 'Rones', stockActual: 3, stockMinimo: 8, stockMaximo: 60, precio: 35.00 },
-            { id: 4, nombre: 'Whisky Johnny Walker Red', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 40, precio: 120.00 },
-            { id: 5, nombre: 'Cerveza Cusqueña 650ml', categoria: 'Cervezas', stockActual: 45, stockMinimo: 15, stockMaximo: 120, precio: 6.00 },
-        ];
+<script>
+    let productos = [];
 
-        let selectedProduct = null;
+    /* ---  FUNCIONES PARA LOCALSTORAGE  --- */
 
-        function getStatus(p) {
-            if (p.stockActual <= p.stockMinimo * 0.5) return 'critical';
-            if (p.stockActual <= p.stockMinimo) return 'low';
-            return 'normal';
+    function saveData() {
+        localStorage.setItem("inventario_productos", JSON.stringify(productos));
+    }
+
+    function loadData() {
+
+        // PRIMERO intentar cargar desde localStorage
+        const data = localStorage.getItem("inventario_productos");
+
+        if (data) {
+            productos = JSON.parse(data);
+        } else {
+            // Si no existe en localStorage, cargar datos iniciales
+            productos = [
+                { id: 1, nombre: 'Cerveza Pilsen 620ml', categoria: 'Cervezas', stockActual: 5, stockMinimo: 10, stockMaximo: 100, precio: 5.50 },
+                { id: 2, nombre: 'Vino Tacama Tinto', categoria: 'Vinos', stockActual: 2, stockMinimo: 5, stockMaximo: 50, precio: 45.00 },
+                { id: 3, nombre: 'Ron Cartavio XO', categoria: 'Rones', stockActual: 3, stockMinimo: 8, stockMaximo: 60, precio: 35.00 },
+                { id: 4, nombre: 'Whisky Johnny Walker Red', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 40, precio: 120.00 },
+                { id: 5, nombre: 'Cerveza Cusqueña 650ml', categoria: 'Cervezas', stockActual: 45, stockMinimo: 15, stockMaximo: 120, precio: 6.00 },
+            ];
         }
+    }
 
-        function renderTable() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const category = document.getElementById('filterCategory').value;
-            const status = document.getElementById('filterStatus').value;
+    /* ------------------------------ */
 
-            const filtered = productos.filter(p => {
-                const matchSearch = p.nombre.toLowerCase().includes(search);
-                const matchCategory = !category || p.categoria === category;
-                const matchStatus = !status || getStatus(p) === status;
-                return matchSearch && matchCategory && matchStatus;
-            });
+    let selectedProduct = null;
 
-            const tbody = document.getElementById('productTable');
-            tbody.innerHTML = filtered.map(p => {
-                const estado = getStatus(p);
-                const porcentaje = Math.min((p.stockActual / p.stockMaximo) * 100, 100);
-                const estadoTexto = { critical: 'Crítico', low: 'Bajo', normal: 'Normal' };
-                const badgeClass = { critical: 'badge-critical', low: 'badge-low', normal: 'badge-normal' };
+    function getStatus(p) {
+        if (p.stockActual <= p.stockMinimo * 0.5) return 'critical';
+        if (p.stockActual <= p.stockMinimo) return 'low';
+        return 'normal';
+    }
 
-                return `
-                    <tr>
-                        <td>
-                            <div class="product-name">${p.nombre}</div>
-                            <div class="product-price">S/ ${p.precio.toFixed(2)} c/u</div>
-                        </td>
-                        <td>${p.categoria}</td>
-                        <td class="center">
-                            <span class="stock-value ${estado}">${p.stockActual}</span>
-                        </td>
-                        <td class="center">
-                            <span class="stock-range">${p.stockMinimo} / ${p.stockMaximo}</span>
-                        </td>
-                        <td>
-                            <div class="stock-bar">
-                                <div class="stock-bar-fill ${estado}" style="width: ${porcentaje}%"></div>
-                            </div>
-                        </td>
-                        <td class="center">
-                            <span class="badge ${badgeClass[estado]}">${estadoTexto[estado]}</span>
-                        </td>
-                        <td class="center">
-                            <button class="btn-adjust" onclick="openModal(${p.id})">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                                Ajustar
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+    function renderTable() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const category = document.getElementById('filterCategory').value;
+        const status = document.getElementById('filterStatus').value;
 
-            updateStats();
-        }
-
-        function updateStats() {
-            const critical = productos.filter(p => getStatus(p) === 'critical').length;
-            const low = productos.filter(p => getStatus(p) === 'low').length;
-            const normal = productos.filter(p => getStatus(p) === 'normal').length;
-            const value = productos.reduce((sum, p) => sum + (p.stockActual * p.precio), 0);
-
-            document.getElementById('statCritical').textContent = critical;
-            document.getElementById('statLow').textContent = low;
-            document.getElementById('statNormal').textContent = normal;
-            document.getElementById('statValue').textContent = `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`;
-
-            const criticalProducts = productos.filter(p => getStatus(p) === 'critical');
-            const alertBox = document.getElementById('alertBox');
-            if (criticalProducts.length > 0) {
-                alertBox.style.display = 'flex';
-                document.getElementById('alertProducts').textContent = 
-                    criticalProducts.map(p => p.nombre).join(', ') + ' requieren reabastecimiento inmediato.';
-            } else {
-                alertBox.style.display = 'none';
-            }
-        }
-
-        function openModal(id) {
-            selectedProduct = productos.find(p => p.id === id);
-            document.getElementById('modalTitle').textContent = `Ajustar Stock - ${selectedProduct.nombre}`;
-            document.getElementById('modalCurrentStock').textContent = selectedProduct.stockActual;
-            document.getElementById('adjustQuantity').value = '';
-            document.getElementById('adjustReason').value = '';
-            document.getElementById('previewStock').textContent = selectedProduct.stockActual;
-            document.getElementById('modalOverlay').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            selectedProduct = null;
-        }
-
-        document.getElementById('adjustQuantity').addEventListener('input', function() {
-            if (selectedProduct) {
-                const adjust = parseInt(this.value) || 0;
-                const newStock = Math.max(0, selectedProduct.stockActual + adjust);
-                document.getElementById('previewStock').textContent = newStock;
-            }
+        const filtered = productos.filter(p => {
+            const matchSearch = p.nombre.toLowerCase().includes(search);
+            const matchCategory = !category || p.categoria === category;
+            const matchStatus = !status || getStatus(p) === status;
+            return matchSearch && matchCategory && matchStatus;
         });
 
-        function confirmAdjust() {
-            if (!selectedProduct) return;
-            
-            const adjust = parseInt(document.getElementById('adjustQuantity').value) || 0;
-            if (adjust === 0) {
-                alert('Ingrese una cantidad válida');
-                return;
-            }
+        const tbody = document.getElementById('productTable');
+        tbody.innerHTML = filtered.map(p => {
+            const estado = getStatus(p);
+            const porcentaje = Math.min((p.stockActual / p.stockMaximo) * 100, 100);
+            const estadoTexto = { critical: 'Crítico', low: 'Bajo', normal: 'Normal' };
+            const badgeClass = { critical: 'badge-critical', low: 'badge-low', normal: 'badge-normal' };
 
-            const index = productos.findIndex(p => p.id === selectedProduct.id);
-            productos[index].stockActual = Math.max(0, productos[index].stockActual + adjust);
-            
-            closeModal();
-            renderTable();
-            alert('Stock actualizado correctamente');
+            return `
+                <tr>
+                    <td>
+                        <div class="product-name">${p.nombre}</div>
+                        <div class="product-price">S/ ${p.precio.toFixed(2)} c/u</div>
+                    </td>
+                    <td>${p.categoria}</td>
+                    <td class="center">
+                        <span class="stock-value ${estado}">${p.stockActual}</span>
+                    </td>
+                    <td class="center">
+                        <span class="stock-range">${p.stockMinimo} / ${p.stockMaximo}</span>
+                    </td>
+                    <td>
+                        <div class="stock-bar">
+                            <div class="stock-bar-fill ${estado}" style="width: ${porcentaje}%"></div>
+                        </div>
+                    </td>
+                    <td class="center">
+                        <span class="badge ${badgeClass[estado]}">${estadoTexto[estado]}</span>
+                    </td>
+                    <td class="center">
+                        <button class="btn-adjust" onclick="openModal(${p.id})">Ajustar</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        updateStats();
+    }
+
+    function updateStats() {
+        const critical = productos.filter(p => getStatus(p) === 'critical').length;
+        const low = productos.filter(p => getStatus(p) === 'low').length;
+        const normal = productos.filter(p => getStatus(p) === 'normal').length;
+        const value = productos.reduce((sum, p) => sum + (p.stockActual * p.precio), 0);
+
+        document.getElementById('statCritical').textContent = critical;
+        document.getElementById('statLow').textContent = low;
+        document.getElementById('statNormal').textContent = normal;
+        document.getElementById('statValue').textContent = `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`;
+
+        const criticalProducts = productos.filter(p => getStatus(p) === 'critical');
+        const alertBox = document.getElementById('alertBox');
+
+        if (criticalProducts.length > 0) {
+            alertBox.style.display = 'flex';
+            document.getElementById('alertProducts').textContent =
+                criticalProducts.map(p => p.nombre).join(', ') + ' requieren reabastecimiento inmediato.';
+        } else {
+            alertBox.style.display = 'none';
+        }
+    }
+
+    function openModal(id) {
+        selectedProduct = productos.find(p => p.id === id);
+        document.getElementById('modalTitle').textContent = `Ajustar Stock - ${selectedProduct.nombre}`;
+        document.getElementById('modalCurrentStock').textContent = selectedProduct.stockActual;
+        document.getElementById('adjustQuantity').value = '';
+        document.getElementById('adjustReason').value = '';
+        document.getElementById('previewStock').textContent = selectedProduct.stockActual;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+        selectedProduct = null;
+    }
+
+    document.getElementById('adjustQuantity').addEventListener('input', function() {
+        if (selectedProduct) {
+            const adjust = parseInt(this.value) || 0;
+            const newStock = Math.max(0, selectedProduct.stockActual + adjust);
+            document.getElementById('previewStock').textContent = newStock;
+        }
+    });
+
+    function confirmAdjust() {
+        if (!selectedProduct) return;
+
+        const adjust = parseInt(document.getElementById('adjustQuantity').value) || 0;
+        if (adjust === 0) {
+            alert('Ingrese una cantidad válida');
+            return;
         }
 
-        document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+        const index = productos.findIndex(p => p.id === selectedProduct.id);
+        productos[index].stockActual = Math.max(0, productos[index].stockActual + adjust);
 
-        document.getElementById('searchInput').addEventListener('input', renderTable);
-        document.getElementById('filterCategory').addEventListener('change', renderTable);
-        document.getElementById('filterStatus').addEventListener('change', renderTable);
-
+        saveData();   // GUARDAR EN LOCALSTORAGE
+        closeModal();
         renderTable();
-    </script>
+        alert('Stock actualizado correctamente');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', renderTable);
+    document.getElementById('filterCategory').addEventListener('change', renderTable);
+    document.getElementById('filterStatus').addEventListener('change', renderTable);
+
+    /* ---  CARGAR DATOS AL INICIAR  --- */
+    loadData();     // Cargar inventario
+    saveData();     // Guardarlo aunque el usuario no toque nada
+    renderTable();  // Mostrar tabla
+
+</script>
+
 </body>
 </html>
 
