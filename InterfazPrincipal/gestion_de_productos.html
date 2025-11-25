@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gestión de Productos - Tienda de Licores Torres</title>
+
   <style>
     :root{
       --bg:#e9f2ff;
@@ -12,15 +13,101 @@
       --text:#1e293b;
       --muted:#475569;
       --danger:#dc2626;
+      --header-bg:#cc6a00;
+      --header-bg2:#b85700;
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial}
-    body{
-      background:var(--bg);
-      color:var(--text);
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Inter,Arial;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 0;            /* ✔ SIN ESPACIO ARRIBA */
+      flex-direction: column;
+      align-items: center;
+    }
+    /* ----------------------------- BARRA SUPERIOR ---------------------------- */
+
+    .topbar {
+      width: 100%;
+      max-width: 100%;       /*  OCUPA TODA LA PANTALLA */
+      background: linear-gradient(to right, var(--header-bg), var(--header-bg2));
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      border-radius: 0;       /*  SIN ESQUINAS CURVAS */
+      margin: 0;              /*  PEGADO ARRIBA */
+    }
+
+    .topbar-left{
       display:flex;
-      justify-content:center;
-      padding:30px;
+      align-items:center;
+      gap:12px;
     }
+
+    .topbar-logo{
+      width:45px;
+      height:45px;
+      background:white;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      color:var(--header-bg2);
+      font-weight:bold;
+    }
+
+    .topbar-title{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+
+    .topbar-title h2{
+      font-size:1.25rem;
+      font-weight:700;
+    }
+
+    .topbar-title span{
+      font-size:0.85rem;
+      opacity:0.9;
+    }
+
+    .back-btn{
+      padding:10px 18px;
+      background:rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.4);
+      border-radius:8px;
+      color:white;
+      cursor:pointer;
+      transition:0.3s;
+      font-size:0.95rem;
+    }
+
+    .back-btn:hover{
+      background:rgba(255,255,255,0.3);
+    }
+
+    @media(max-width:600px){
+      .topbar{
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+      }
+    }
+
+    /* ----------------------------- CONTENEDOR ---------------------------- */
+
     .container{
       width:100%;
       max-width:900px;
@@ -30,28 +117,36 @@
       border:1px solid rgba(255,255,255,0.05);
       box-shadow:0 6px 25px rgba(0,0,0,0.5);
     }
+
     h1{
       text-align:center;
       margin-bottom:20px;
       color:var(--accent);
     }
+
     .form-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:15px;
       margin-bottom:20px;
     }
-    label{font-size:0.9rem;color:var(--muted)}
-    input, select {
-        background-color: #f9f9f9;      /* Color claro */
-        color: #000;                    /* Texto negro */
-        border: 1px solid #cdd4e0;      /* Borde ligero */
-        padding: 10px;
-        border-radius: 8px;
-        width: 100%;
-        font-size: 15px;
-        outline: none;
+
+    label{
+      font-size:0.9rem;
+      color:var(--muted)
     }
+
+    input, select{
+      background-color:#f9f9f9;
+      color:#000;
+      border:1px solid #cdd4e0;
+      padding:10px;
+      border-radius:8px;
+      width:100%;
+      font-size:15px;
+      outline:none;
+    }
+
     .btn{
       background:var(--accent);
       padding:10px 18px;
@@ -59,21 +154,32 @@
       border-radius:8px;
       cursor:pointer;
       font-weight:600;
-      color:#ffffff;
+      color:white;
       transition:0.3s;
+      margin-right:5px;
     }
-    .btn:hover{filter:brightness(1.1)}
+
+    .btn:hover{
+      filter:brightness(1.1)
+    }
+
     table{
       width:100%;
       border-collapse:collapse;
       margin-top:25px;
     }
+
     th, td{
       padding:12px;
-      border-bottom:1px solid rgba(255,255,255,0.1);
+      border-bottom:1px solid rgba(0,0,0,0.1);
       text-align:left;
     }
-    th{color:var(--accent);font-size:0.95rem}
+
+    th{
+      color:var(--accent);
+      font-size:0.95rem;
+    }
+
     .delete-btn{
       background:var(--danger);
       padding:6px 12px;
@@ -82,17 +188,33 @@
       color:white;
       cursor:pointer;
     }
+
     @media(max-width:600px){
-      .form-grid{grid-template-columns:1fr}
-    }
-    .error-message {
-      color: var(--danger);
-      font-size: 0.9rem;
-      margin-top: 10px;
+      .form-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
+
 <body>
+
+  <!-- ------------------------ BARRA SUPERIOR ------------------------ -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">🛒</div>
+
+      <div class="topbar-title">
+        <h2>LicoresTorres</h2>
+        <span>Control de Inventario</span>
+      </div>
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='Principal.html'">
+      ← Volver al Inicio
+    </button>
+  </div>
+
+  <!-- ------------------------ CONTENIDO PRINCIPAL ------------------------ -->
+
   <div class="container">
     <h1>Gestión de Productos<br>Tienda de Licores Torres</h1>
 
@@ -100,42 +222,40 @@
 
     <form id="productForm">
       <div class="form-grid">
+
         <div>
-          <label>Seleccionar producto:</label>
-          <select id="producto" required>
-            <option value="">Seleccionar producto...</option>
-            <option value="Cerveza Pilsen 620ml">Cerveza Pilsen 620ml</option>
-            <option value="Cerveza Cusqueña 650ml">Cerveza Cusqueña 650ml</option>
-            <option value="Vino Tacama Tinto">Vino Tacama Tinto</option>
-            <option value="Ron Cartavio XO">Ron Cartavio XO</option>
-            <option value="Whisky Johnnie Walker Red">Whisky Johnnie Walker Red</option>
-          </select>
+          <label>Nombre del producto:</label>
+          <input type="text" id="nombre" required />
         </div>
+
         <div>
           <label>Categoría:</label>
-          <select id="categoria" required>
-            <option value="">Seleccionar categoría...</option>
-            <option value="Vinos">Vinos</option>
-            <option value="Cervezas">Cervezas</option>
-            <option value="Whisky">Whisky</option>
-            <option value="Ron">Ron</option>
-            <option value="Pisco">Pisco</option>
-            <option value="Vodka">Vodka</option>
+          <select id="categoria">
+            <option>Vinos</option>
+            <option>Cervezas</option>
+            <option>Whisky</option>
+            <option>Ron</option>
+            <option>Pisco</option>
+            <option>Vodka</option>
           </select>
         </div>
+
         <div>
           <label>Precio (S/):</label>
-          <input type="text" id="precio" required />
-          <div id="precioError" class="error-message"></div>
+          <input type="number" id="precio" step="0.01" required />
         </div>
+
         <div>
           <label>Cantidad en stock:</label>
-          <input type="text" id="stock" required />
-          <div id="stockError" class="error-message"></div>
+          <input type="number" id="stock" required />
         </div>
+
       </div>
+
       <button class="btn" type="submit">Agregar Producto</button>
-      <button class="btn" onclick="window.location.href='Principal.html'" type="button">Regresar</button>
+      <button class="btn" type="button" onclick="window.location.href='Principal.html'">
+        Regresar
+      </button>
     </form>
 
     <h2 style="margin-top:25px; color:var(--accent); font-size:1.2rem">Inventario Actual</h2>
@@ -157,56 +277,29 @@
   <script>
     const form = document.getElementById('productForm');
     const tabla = document.getElementById('tablaProductos');
-    const precioInput = document.getElementById('precio');
-    const stockInput = document.getElementById('stock');
-    const precioError = document.getElementById('precioError');
-    const stockError = document.getElementById('stockError');
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', (e)=>{
       e.preventDefault();
 
       const nombre = document.getElementById('nombre').value;
       const categoria = document.getElementById('categoria').value;
-      const precio = parseFloat(precioInput.value);
-      const stock = parseInt(stockInput.value);
+      const precio = document.getElementById('precio').value;
+      const stock = document.getElementById('stock').value;
 
-      // Validación para precio y stock
-      let valid = true;
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${nombre}</td>
+        <td>${categoria}</td>
+        <td>S/ ${precio}</td>
+        <td>${stock}</td>
+        <td><button class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button></td>
+      `;
 
-      // Limpiar mensajes de error
-      precioError.textContent = '';
-      stockError.textContent = '';
-
-      // Validar que el precio sea un número positivo
-      if (isNaN(precio) || precio < 0) {
-        precioError.textContent = 'El precio debe ser un número positivo.';
-        valid = false;
-      }
-
-      // Validar que el stock sea un número positivo
-      if (isNaN(stock) || stock < 0) {
-        stockError.textContent = 'El stock debe ser un número entero positivo.';
-        valid = false;
-      }
-
-      if (valid) {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${nombre}</td>
-          <td>${categoria}</td>
-          <td>S/ ${precio}</td>
-          <td>${stock}</td>
-          <td><button class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button></td>
-        `;
-
-        tabla.appendChild(row);
-        form.reset();
-      }
+      tabla.appendChild(row);
+      form.reset();
     });
   </script>
+
 </body>
 </html>
-
-
-
 
