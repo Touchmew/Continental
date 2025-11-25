@@ -29,23 +29,24 @@
       color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 0;            /* ✔ SIN ESPACIO ARRIBA */
+      padding: 0;
       flex-direction: column;
       align-items: center;
     }
-    /* ----------------------------- BARRA SUPERIOR ---------------------------- */
+
+    /* ----------------------------- BARRA SUPERIOR (ORIGINAL) ---------------------------- */
 
     .topbar {
       width: 100%;
-      max-width: 100%;       /*  OCUPA TODA LA PANTALLA */
+      max-width: 100%;
       background: linear-gradient(to right, var(--header-bg), var(--header-bg2));
       padding: 15px 25px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       color: white;
-      border-radius: 0;       /*  SIN ESQUINAS CURVAS */
-      margin: 0;              /*  PEGADO ARRIBA */
+      border-radius: 0;
+      margin: 0;
     }
 
     .topbar-left{
@@ -98,15 +99,7 @@
       background:rgba(255,255,255,0.3);
     }
 
-    @media(max-width:600px){
-      .topbar{
-        flex-direction:column;
-        gap:10px;
-        text-align:center;
-      }
-    }
-
-    /* ----------------------------- CONTENEDOR ---------------------------- */
+    /* ----------------------------- CONTENIDO ---------------------------- */
 
     .container{
       width:100%;
@@ -114,7 +107,6 @@
       background:var(--card);
       padding:25px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,0.05);
       box-shadow:0 6px 25px rgba(0,0,0,0.5);
     }
 
@@ -131,11 +123,6 @@
       margin-bottom:20px;
     }
 
-    label{
-      font-size:0.9rem;
-      color:var(--muted)
-    }
-
     input, select{
       background-color:#f9f9f9;
       color:#000;
@@ -147,6 +134,16 @@
       outline:none;
     }
 
+    /* QUITAR SPINBUTTONS */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+
     .btn{
       background:var(--accent);
       padding:10px 18px;
@@ -155,7 +152,6 @@
       cursor:pointer;
       font-weight:600;
       color:white;
-      transition:0.3s;
       margin-right:5px;
     }
 
@@ -188,10 +184,6 @@
       color:white;
       cursor:pointer;
     }
-
-    @media(max-width:600px){
-      .form-grid{grid-template-columns:1fr;}
-    }
   </style>
 </head>
 
@@ -213,8 +205,6 @@
     </button>
   </div>
 
-  <!-- ------------------------ CONTENIDO PRINCIPAL ------------------------ -->
-
   <div class="container">
     <h1>Gestión de Productos<br>Tienda de Licores Torres</h1>
 
@@ -224,8 +214,15 @@
       <div class="form-grid">
 
         <div>
-          <label>Nombre del producto:</label>
-          <input type="text" id="nombre" required />
+          <label>Producto:</label>
+          <select id="nombre" required>
+            <option value="">Seleccionar producto...</option>
+            <option>Cerveza Pilsen 620ml</option>
+            <option>Cerveza Cusqueña 650ml</option>
+            <option>Vino Tacama Tinto</option>
+            <option>Ron Cartavio XO</option>
+            <option>Whisky Johnnie Walker Red</option>
+          </select>
         </div>
 
         <div>
@@ -242,20 +239,18 @@
 
         <div>
           <label>Precio (S/):</label>
-          <input type="number" id="precio" step="0.01" required />
+          <input type="number" id="precio" step="0.01" min="0" required />
         </div>
 
         <div>
           <label>Cantidad en stock:</label>
-          <input type="number" id="stock" required />
+          <input type="number" id="stock" min="0" required />
         </div>
 
       </div>
 
       <button class="btn" type="submit">Agregar Producto</button>
-      <button class="btn" type="button" onclick="window.location.href='Principal.html'">
-        Regresar
-      </button>
+      <button class="btn" type="button" onclick="window.location.href='Principal.html'">Regresar</button>
     </form>
 
     <h2 style="margin-top:25px; color:var(--accent); font-size:1.2rem">Inventario Actual</h2>
@@ -283,14 +278,20 @@
 
       const nombre = document.getElementById('nombre').value;
       const categoria = document.getElementById('categoria').value;
-      const precio = document.getElementById('precio').value;
-      const stock = document.getElementById('stock').value;
+      const precio = parseFloat(document.getElementById('precio').value);
+      const stock = parseInt(document.getElementById('stock').value);
+
+      // Validación por seguridad
+      if (precio < 0 || stock < 0) {
+        alert("El precio y el stock no pueden ser negativos.");
+        return;
+      }
 
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${nombre}</td>
         <td>${categoria}</td>
-        <td>S/ ${precio}</td>
+        <td>S/ ${precio.toFixed(2)}</td>
         <td>${stock}</td>
         <td><button class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button></td>
       `;
@@ -302,4 +303,3 @@
 
 </body>
 </html>
-
