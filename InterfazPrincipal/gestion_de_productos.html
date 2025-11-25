@@ -208,8 +208,9 @@
   <div class="container">
     <h1>Gestión de Productos<br>Tienda de Licores Torres</h1>
 
-    <h2 style="margin-bottom:10px; color:var(--accent); font-size:1.2rem">Registrar Producto</h2>
+    <h2 style="margin-bottom:10px; color:var(--accent); font-size:1.2rem">Aumentar Stock</h2>
 
+    <!-- -------------- FORMULARIO SOLO PARA AUMENTAR STOCK ---------------- -->
     <form id="productForm">
       <div class="form-grid">
 
@@ -217,39 +218,18 @@
           <label>Producto:</label>
           <select id="nombre" required>
             <option value="">Seleccionar producto...</option>
-            <option>Cerveza Pilsen 620ml</option>
-            <option>Cerveza Cusqueña 650ml</option>
-            <option>Vino Tacama Tinto</option>
-            <option>Ron Cartavio XO</option>
-            <option>Whisky Johnnie Walker Red</option>
+            <!-- Se llenará dinámicamente desde localStorage -->
           </select>
         </div>
 
         <div>
-          <label>Categoría:</label>
-          <select id="categoria">
-            <option>Vinos</option>
-            <option>Cervezas</option>
-            <option>Whisky</option>
-            <option>Ron</option>
-            <option>Pisco</option>
-            <option>Vodka</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Precio (S/):</label>
-          <input type="number" id="precio" step="0.01" min="0" required />
-        </div>
-
-        <div>
-          <label>Cantidad en stock:</label>
-          <input type="number" id="stock" min="0" required />
+          <label>Cantidad a agregar:</label>
+          <input type="number" id="cantidad" min="1" required />
         </div>
 
       </div>
 
-      <button class="btn" type="submit">Agregar Producto</button>
+      <button class="btn" type="submit">Aumentar Stock</button>
       <button class="btn" type="button" onclick="window.location.href='Principal.html'">Regresar</button>
     </form>
 
@@ -260,46 +240,89 @@
         <tr>
           <th>Producto</th>
           <th>Categoría</th>
-          <th>Precio</th>
-          <th>Stock</th>
-          <th>Acción</th>
+          <th>Stock Actual</th>
         </tr>
       </thead>
       <tbody id="tablaProductos"></tbody>
     </table>
   </div>
 
-  <script>
+<script>
+
     const form = document.getElementById('productForm');
     const tabla = document.getElementById('tablaProductos');
+    const selectProducto = document.getElementById('nombre');
 
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
+    /* ---------- Cargar inventario del HTML 1 ---------- */
+    let inventario = JSON.parse(localStorage.getItem("inventario_productos")) || [];
 
-      const nombre = document.getElementById('nombre').value;
-      const categoria = document.getElementById('categoria').value;
-      const precio = parseFloat(document.getElementById('precio').value);
-      const stock = parseInt(document.getElementById('stock').value);
+    /* ---------- Llenar SELECT con productos del inventario ---------- */
+    function cargarSelectProductos() {
+        selectProducto.innerHTML = '<option value="">Seleccionar producto...</option>';
 
-      // Validación por seguridad
-      if (precio < 0 || stock < 0) {
-        alert("El precio y el stock no pueden ser negativos.");
-        return;
-      }
+        inventario.forEach(p => {
+            const option = document.createElement("option");
+            option.value = p.nombre;
+            option.textContent = p.nombre;
+            selectProducto.appendChild(option);
+        });
+    }
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${nombre}</td>
-        <td>${categoria}</td>
-        <td>S/ ${precio.toFixed(2)}</td>
-        <td>${stock}</td>
-        <td><button class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button></td>
-      `;
+    /* ---------- Mostrar tabla local ---------- */
+    function renderTablaLocal() {
+        tabla.innerHTML = "";
+        inventario.forEach(p => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${p.nombre}</td>
+                <td>${p.categoria}</td>
+                <td>${p.stockActual}</td>
+            `;
+            tabla.appendChild(row);
+        });
+    }
 
-      tabla.appendChild(row);
-      form.reset();
+    /* ---------- Guardar inventario ---------- */
+    function guardarInventario() {
+        localStorage.setItem("inventario_productos", JSON.stringify(inventario));
+    }
+
+    /* ---------- Aumentar stock ---------- */
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const nombreProd = selectProducto.value;
+        const cantidad = parseInt(document.getElementById('cantidad').value);
+
+        if (cantidad <= 0) {
+            alert("La cantidad debe ser mayor a 0.");
+            return;
+        }
+
+        /* Buscar producto en inventario */
+        const producto = inventario.find(p => p.nombre === nombreProd);
+
+        if (!producto) {
+            alert("Este producto NO existe en el inventario principal.");
+            return;
+        }
+
+        /*  Aumentar stock */
+        producto.stockActual += cantidad;
+
+        /* Guardar y mostrar */
+        guardarInventario();
+        renderTablaLocal();
+
+        alert("Stock aumentado correctamente.");
+        form.reset();
     });
-  </script>
+
+    /* ---------- Inicializar ---------- */
+    cargarSelectProductos();
+    renderTablaLocal();
+
+</script>
 
 </body>
 </html>
