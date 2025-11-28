@@ -16,6 +16,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
             min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
         }
 
         /* Header */
@@ -411,10 +413,13 @@
             background: white;
             border-top: 1px solid #e5e7eb;
             padding: 1rem;
-            margin-top: 2rem;
             text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
         }
-
         footer p {
             color: #6b7280;
             font-size: 0.875rem;
@@ -605,18 +610,6 @@
                 </div>
             </div>
 
-            <div class="stat-card purple">
-                <div class="stat-content">
-                    <div class="stat-info">
-                        <p>Ventas Mes</p>
-                        <p>S/ 28,560</p>
-                        <p class="positive">↑ 18% vs anterior</p>
-                    </div>
-                    <div class="stat-icon purple">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -648,18 +641,6 @@
                 </div>
             </button>
 
-            <button class="module-card amber" onclick="window.location.href='compras_proveedores.html'">
-                <div class="module-content">
-                    <div class="module-icon amber">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="module-text">
-                        <h3>Compras a Proveedores</h3>
-                        <p>Gestionar pedidos y compras</p>
-                    </div>
-                </div>
-            </button>
-
             <button class="module-card red" onclick="window.location.href='control_de_Stock.html'">
                 <div class="module-content">
                     <div class="module-icon red">
@@ -672,54 +653,9 @@
                 </div>
             </button>
 
-            <button class="module-card purple" onclick="window.location.href='Reportes_y_Analisis.html'">
-                <div class="module-content">
-                    <div class="module-icon purple">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="module-text">
-                        <h3>Reportes y Análisis</h3>
-                        <p>Generar informes detallados</p>
-                    </div>
                 </div>
-            </button>
-            <button class="module-card gray">
-                <div class="module-content">
-                    <div class="module-icon gray">
-                        <i data-lucide="settings"></i>
-                    </div>
-                    <div class="module-text">
-                        <h3>Configuración</h3>
-                        <p>Ajustes del sistema y seguridad</p>
-                    </div>
-                </div>
-            </button>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     <!-- Footer -->
     <footer>
         <p>Sistema de Gestión LicoresTorres v1.0 | San Jerónimo, Cusco | © 2025</p>
@@ -746,6 +682,63 @@
                 icon.classList.add('fa-moon');
             }
         }
+
+        // SINCRONIZACIÓN CON CONTROL DE STOCK
+        function getStatus(producto) {
+            if (producto.stockActual <= producto.stockMinimo * 0.5) return 'critical';
+            if (producto.stockActual <= producto.stockMinimo) return 'low';
+            return 'normal';
+        }
+
+        function updateDashboardData() {
+            // Cargar productos desde localStorage
+            const data = localStorage.getItem("inventario_productos");
+            
+            if (data) {
+                const productos = JSON.parse(data);
+                
+                // Contar productos con stock bajo o crítico
+                const stockBajo = productos.filter(p => {
+                    const status = getStatus(p);
+                    return status === 'critical' || status === 'low';
+                });
+                
+                const stockCritico = productos.filter(p => getStatus(p) === 'critical');
+                
+                // Actualizar badge de notificaciones
+                const notificationBadge = document.querySelector('.notification-badge');
+                if (notificationBadge) {
+                    notificationBadge.textContent = stockBajo.length;
+                }
+                
+                // Actualizar tarjeta de Stock Bajo
+                const stockBajoCard = document.querySelector('.stat-card.red .stat-info p:nth-child(2)');
+                if (stockBajoCard) {
+                    stockBajoCard.textContent = stockBajo.length;
+                }
+                
+                // Actualizar alerta de stock bajo
+                if (stockCritico.length > 0) {
+                    const alertBox = document.getElementById('stockAlert');
+                    const alertContent = alertBox.querySelector('.alert-content p');
+                    
+                    const productosTexto = stockCritico.map(p => 
+                        `${p.nombre} (${p.stockActual} unid.)`
+                    ).join(', ');
+                    
+                    alertContent.innerHTML = `${stockCritico.length} productos están por debajo del nivel mínimo: <strong>${productosTexto}</strong>`;
+                    alertBox.classList.remove('hidden');
+                } else {
+                    document.getElementById('stockAlert').classList.add('hidden');
+                }
+            }
+        }
+
+        // Actualizar datos al cargar la página
+        document.addEventListener('DOMContentLoaded', updateDashboardData);
+        
+        // Actualizar datos cada 2 segundos para detectar cambios
+        setInterval(updateDashboardData, 2000);
     </script>
 </body>
 </html>
