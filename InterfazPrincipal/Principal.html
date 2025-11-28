@@ -560,10 +560,6 @@
     <!-- Search Bar -->
     <div class="search-container">
         <div class="search-box">
-            <div class="search-input-wrapper">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Buscar producto por nombre o código...">
-            </div>
         </div>
     </div>
 
@@ -645,7 +641,7 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="module-text">
-                        <h3>Control de Stock</h3>
+                        <h3>Control de Inventario</h3>
                         <p>Monitorear niveles de inventario</p>
                     </div>
                 </div>
@@ -709,10 +705,11 @@
                     stockBajoCard.textContent = stockBajo.length;
                 }
                 
-                // Actualizar Total Productos
+                // Actualizar Total Productos - SUMA TOTAL DE UNIDADES
                 const totalProductosCard = document.querySelector('.stat-card.blue .stat-info p:nth-child(2)');
                 if (totalProductosCard) {
-                    totalProductosCard.textContent = productos.length;
+                    const totalUnidades = productos.reduce((suma, p) => suma + p.stockActual, 0);
+                    totalProductosCard.textContent = totalUnidades;
                 }
                 
                 // Actualizar alerta de stock bajo
