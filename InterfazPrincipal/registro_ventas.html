@@ -148,6 +148,10 @@
             font-size: 0.875rem;
         }
 
+        .form-group label .required {
+            color: #ef4444;
+        }
+
         .form-group input,
         .form-group select {
             width: 100%;
@@ -167,6 +171,12 @@
         .form-row {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
 
@@ -196,13 +206,31 @@
             box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
         }
 
-        .btn-danger {
-            background: #ef4444;
-            color: white;
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .btn-danger:hover {
-            background: #dc2626;
+        .client-info {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .client-info h4 {
+            color: #065f46;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .client-info p {
+            color: #047857;
+            font-size: 0.875rem;
+            margin: 0.25rem 0;
         }
 
         /* Cart Section */
@@ -301,13 +329,45 @@
             color: #10b981;
         }
 
+        /* Search Section */
+        .search-section {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
         /* Sales Table */
         .sales-table-section {
             background: white;
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             padding: 1.5rem;
-            margin-top: 1.5rem;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .results-count {
+            color: #6b7280;
+            font-size: 0.875rem;
         }
 
         .table-wrapper {
@@ -355,6 +415,18 @@
             color: #065f46;
         }
 
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #9ca3af;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
         @media (max-width: 1024px) {
             .content-grid {
                 grid-template-columns: 1fr;
@@ -366,7 +438,7 @@
         }
 
         @media (max-width: 768px) {
-            .form-row {
+            .form-row, .form-row-2 {
                 grid-template-columns: 1fr;
             }
         }
@@ -405,25 +477,43 @@
             <div class="form-section">
                 <h2 class="section-title">
                     <i class="fas fa-plus-circle"></i>
-                    Agregar Producto a la Venta
+                    Nueva Venta
                 </h2>
 
+                <!-- Client Info Form -->
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label>Nombre del Cliente <span class="required">*</span></label>
+                        <input type="text" id="clientName" placeholder="Ej: Juan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido del Cliente <span class="required">*</span></label>
+                        <input type="text" id="clientLastName" placeholder="Ej: Pérez" required>
+                    </div>
+                </div>
+
+                <div id="clientInfoDisplay" class="client-info" style="display: none;">
+                    <h4><i class="fas fa-user"></i> Cliente Registrado</h4>
+                    <p><strong>Nombre:</strong> <span id="displayClientName"></span></p>
+                </div>
+
+                <!-- Product Form -->
                 <form id="saleForm">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Producto</label>
+                            <label>Producto <span class="required">*</span></label>
                             <select id="productSelect" required>
                                 <option value="">Seleccionar producto...</option>
-                                <option value="1" data-price="8.50" data-stock="120">Cerveza Pilsen 620ml</option>
-                                <option value="2" data-price="6.00" data-stock="85">Cerveza Cusqueña 650ml</option>
-                                <option value="3" data-price="35.00" data-stock="25">Vino Tacama Tinto</option>
-                                <option value="4" data-price="65.00" data-stock="15">Ron Cartavio XO</option>
-                                <option value="5" data-price="45.00" data-stock="30">Whisky Johnnie Walker Red</option>
+                                <option value="1" data-price="5.50">Cerveza Pilsen 620ml</option>
+                                <option value="2" data-price="45.00">Vino Tacama Tinto</option>
+                                <option value="3" data-price="35.00">Ron Cartavio XO</option>
+                                <option value="4" data-price="120.00">Whisky Johnny Walker Red</option>
+                                <option value="5" data-price="6.00">Cerveza Cusqueña 650ml</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Cantidad</label>
-                            <input type="number" id="quantity" min="1" max ="99" value="1" required>
+                            <label>Cantidad <span class="required">*</span></label>
+                            <input type="number" id="quantity" min="1" max="99" value="1" required>
                         </div>
                         <div class="form-group">
                             <label>Precio Unit.</label>
@@ -474,12 +564,34 @@
             </div>
         </div>
 
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 class="section-title">
+                <i class="fas fa-search"></i>
+                Buscar Ventas por Cliente
+            </h2>
+
+            <div style="display: flex; gap: 1rem; align-items: end;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Nombre o Apellido del Cliente</label>
+                    <input type="text" id="searchClient" placeholder="Buscar por nombre o apellido..." onkeyup="searchSales()">
+                </div>
+                <button class="btn btn-secondary" onclick="clearSearch()" style="width: auto;">
+                    <i class="fas fa-times"></i>
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
         <!-- Sales History Table -->
         <div class="sales-table-section">
-            <h2 class="section-title">
-                <i class="fas fa-history"></i>
-                Ventas Recientes
-            </h2>
+            <div class="table-header">
+                <h2 class="section-title">
+                    <i class="fas fa-history"></i>
+                    Historial de Ventas
+                </h2>
+                <span class="results-count" id="resultsCount">Mostrando 0 ventas</span>
+            </div>
 
             <div class="table-wrapper">
                 <table>
@@ -487,6 +599,7 @@
                         <tr>
                             <th>Nº Venta</th>
                             <th>Fecha</th>
+                            <th>Cliente</th>
                             <th>Productos</th>
                             <th>Cantidad</th>
                             <th>Total</th>
@@ -494,7 +607,12 @@
                         </tr>
                     </thead>
                     <tbody id="salesHistory">
-                        
+                        <tr>
+                            <td colspan="7" class="no-results">
+                                <i class="fas fa-inbox"></i>
+                                <p>No hay ventas registradas</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -503,7 +621,85 @@
 
     <script>
         let cart = [];
-        let saleCounter = 3;
+        let allSales = [];
+        let currentClient = null;
+
+        // Load sales from localStorage on page load
+        window.addEventListener('load', function() {
+            loadSales();
+            loadInventory(); // Cargar inventario para sincronizar
+            displaySales(allSales);
+        });
+
+        // Cargar inventario desde localStorage
+        function loadInventory() {
+            const data = localStorage.getItem("inventario_productos");
+            if (data) {
+                return JSON.parse(data);
+            }
+            return [];
+        }
+
+        // Guardar inventario en localStorage
+        function saveInventory(productos) {
+            localStorage.setItem("inventario_productos", JSON.stringify(productos));
+        }
+
+        // Actualizar stock en inventario
+        function updateInventoryStock(productId, quantitySold) {
+            let productos = loadInventory();
+            
+            console.log('=== ACTUALIZANDO INVENTARIO ===');
+            console.log('Producto ID a buscar:', productId, 'Tipo:', typeof productId);
+            console.log('Cantidad vendida:', quantitySold);
+            console.log('Inventario completo:', productos);
+            
+            // Buscar el producto por ID y reducir su stock
+            const productIndex = productos.findIndex(p => {
+                console.log('Comparando:', p.id, 'con', parseInt(productId), '- Match:', p.id === parseInt(productId));
+                return p.id === parseInt(productId);
+            });
+            
+            console.log('Índice encontrado:', productIndex);
+            
+            if (productIndex !== -1) {
+                const oldStock = productos[productIndex].stockActual;
+                productos[productIndex].stockActual -= quantitySold;
+                
+                // Asegurarse de que el stock no sea negativo
+                if (productos[productIndex].stockActual < 0) {
+                    productos[productIndex].stockActual = 0;
+                }
+                
+                console.log(`Stock actualizado: ${productos[productIndex].nombre}`);
+                console.log(`Stock anterior: ${oldStock} -> Nuevo stock: ${productos[productIndex].stockActual}`);
+                
+                saveInventory(productos);
+                console.log('Inventario guardado en localStorage');
+            } else {
+                console.error('¡PRODUCTO NO ENCONTRADO EN INVENTARIO!');
+                console.log('IDs disponibles:', productos.map(p => p.id));
+            }
+            console.log('=== FIN ACTUALIZACIÓN ===');
+        }
+
+        // Update client info display
+        document.getElementById('clientName').addEventListener('input', updateClientDisplay);
+        document.getElementById('clientLastName').addEventListener('input', updateClientDisplay);
+
+        function updateClientDisplay() {
+            const name = document.getElementById('clientName').value.trim();
+            const lastName = document.getElementById('clientLastName').value.trim();
+            
+            if (name && lastName) {
+                currentClient = { name, lastName };
+                document.getElementById('displayClientName').textContent = `${name} ${lastName}`;
+                document.getElementById('clientInfoDisplay').style.display = 'block';
+            } else {
+                currentClient = null;
+                document.getElementById('clientInfoDisplay').style.display = 'none';
+            }
+        }
 
         // Update price when product is selected
         document.getElementById('productSelect').addEventListener('change', function() {
@@ -516,12 +712,26 @@
         document.getElementById('saleForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            if (!currentClient) {
+                alert('Por favor ingrese el nombre y apellido del cliente');
+                return;
+            }
+            
             const select = document.getElementById('productSelect');
             const selectedOption = select.options[select.selectedIndex];
             const quantity = parseInt(document.getElementById('quantity').value);
             const price = parseFloat(selectedOption.dataset.price);
             
             if (!selectedOption.value) return;
+            
+            // Verificar stock disponible antes de agregar
+            const productos = loadInventory();
+            const producto = productos.find(p => p.id === parseInt(selectedOption.value));
+            
+            if (producto && producto.stockActual < quantity) {
+                alert(`Stock insuficiente. Solo hay ${producto.stockActual} unidades disponibles de ${producto.nombre}`);
+                return;
+            }
             
             const item = {
                 id: selectedOption.value,
@@ -534,8 +744,9 @@
             cart.push(item);
             updateCart();
             
-            // Reset form
-            this.reset();
+            // Reset product fields only
+            document.getElementById('productSelect').value = '';
+            document.getElementById('quantity').value = '1';
             document.getElementById('price').value = '';
         });
 
@@ -589,37 +800,136 @@
 
         // Finalize sale
         document.getElementById('finalizeSale').addEventListener('click', function() {
-            if (cart.length === 0) return;
+            if (cart.length === 0 || !currentClient) return;
             
-            const total = parseFloat(document.getElementById('total').textContent.replace('S/ ', ''));
+            const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
+            const igv = subtotal * 0.18;
+            const total = subtotal + igv;
             const now = new Date();
-            const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
             
-            const productNames = cart.map(item => item.name).join(', ');
-            const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const sale = {
+                id: Date.now(),
+                saleNumber: allSales.length + 1,
+                date: now,
+                clientName: currentClient.name,
+                clientLastName: currentClient.lastName,
+                products: [...cart],
+                subtotal: subtotal,
+                igv: igv,
+                total: total,
+                status: 'Completada'
+            };
             
-            // Add to table
-            const tbody = document.getElementById('salesHistory');
-            const newRow = tbody.insertRow(0);
-            newRow.innerHTML = `
-                <td>#${saleCounter.toString().padStart(4, '0')}</td>
-                <td>${dateStr}</td>
-                <td>${productNames}</td>
-                <td>${totalQuantity}</td>
-                <td>S/ ${total.toFixed(2)}</td>
-                <td><span class="badge badge-success">Completada</span></td>
-            `;
+            allSales.unshift(sale);
+            saveSales();
             
-            saleCounter++;
+            // ACTUALIZAR INVENTARIO: Reducir stock de cada producto vendido
+            cart.forEach(item => {
+                updateInventoryStock(item.id, item.quantity);
+            });
             
-            // Clear cart
+            displaySales(allSales);
+            
+            // Clear cart and client
             cart = [];
+            currentClient = null;
             updateCart();
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientLastName').value = '';
+            document.getElementById('clientInfoDisplay').style.display = 'none';
             
-            alert('¡Venta registrada exitosamente!');
+            alert('¡Venta registrada exitosamente!\nEl inventario ha sido actualizado.');
         });
+
+        // Save sales to localStorage
+        function saveSales() {
+            localStorage.setItem('licoresTorres_sales', JSON.stringify(allSales));
+        }
+
+        // Load sales from localStorage
+        function loadSales() {
+            const saved = localStorage.getItem('licoresTorres_sales');
+            if (saved) {
+                allSales = JSON.parse(saved);
+                // Convert date strings back to Date objects
+                allSales.forEach(sale => {
+                    sale.date = new Date(sale.date);
+                });
+            }
+        }
+
+        // Display sales in table
+        function displaySales(sales) {
+            const tbody = document.getElementById('salesHistory');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            if (sales.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="no-results">
+                            <i class="fas fa-inbox"></i>
+                            <p>No se encontraron ventas</p>
+                        </td>
+                    </tr>
+                `;
+                resultsCount.textContent = 'Mostrando 0 ventas';
+                return;
+            }
+            
+            tbody.innerHTML = sales.map(sale => {
+                const dateStr = formatDate(sale.date);
+                const productNames = sale.products.map(p => p.name).join(', ');
+                const totalQuantity = sale.products.reduce((sum, p) => sum + p.quantity, 0);
+                
+                return `
+                    <tr>
+                        <td><strong>#${sale.saleNumber.toString().padStart(4, '0')}</strong></td>
+                        <td>${dateStr}</td>
+                        <td><strong>${sale.clientName} ${sale.clientLastName}</strong></td>
+                        <td>${productNames}</td>
+                        <td>${totalQuantity}</td>
+                        <td><strong>S/ ${sale.total.toFixed(2)}</strong></td>
+                        <td><span class="badge badge-success">${sale.status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            resultsCount.textContent = `Mostrando ${sales.length} venta${sales.length !== 1 ? 's' : ''}`;
+        }
+
+        // Format date
+        function formatDate(date) {
+            const d = new Date(date);
+            const day = d.getDate().toString().padStart(2, '0');
+            const month = (d.getMonth() + 1).toString().padStart(2, '0');
+            const year = d.getFullYear();
+            const hours = d.getHours().toString().padStart(2, '0');
+            const minutes = d.getMinutes().toString().padStart(2, '0');
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+        }
+
+        // Search sales (only by client name)
+        function searchSales() {
+            const clientSearch = document.getElementById('searchClient').value.toLowerCase().trim();
+            
+            if (!clientSearch) {
+                displaySales(allSales);
+                return;
+            }
+            
+            const filtered = allSales.filter(sale => {
+                const fullName = `${sale.clientName} ${sale.clientLastName}`.toLowerCase();
+                return fullName.includes(clientSearch);
+            });
+            
+            displaySales(filtered);
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchClient').value = '';
+            displaySales(allSales);
+        }
     </script>
 </body>
-
 </html>
-
