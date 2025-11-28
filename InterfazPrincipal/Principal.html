@@ -140,6 +140,17 @@
             font-size: 20px;
         }
 
+        .darkmode-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .darkmode-btn i {
+            color: white;
+            font-size: 20px;
+        }
+
         /* Alert */
         .alert-container {
             max-width: 1400px;
@@ -429,18 +440,7 @@
             display: none;
         }
 
-        /* --- MODO OSCURO --- */
-        .darkmode-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .darkmode-btn i {
-            color: white;
-            font-size: 20px;
-        }
-
+        /* Dark Mode */
         .dark-mode {
             background: #111827 !important;
             color: #f9fafb !important;
@@ -524,10 +524,9 @@
             <div class="user-section">
                 <div class="notification-icon">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge">0</span>
                 </div>
 
-                <!-- Botón modo oscuro (opción C: antes del avatar) -->
                 <button class="darkmode-btn" onclick="toggleDarkMode()">
                     <i id="darkIcon" class="fas fa-moon"></i>
                 </button>
@@ -548,12 +547,12 @@
 
     <!-- Alert -->
     <div class="alert-container">
-        <div class="alert" id="stockAlert">
+        <div class="alert hidden" id="stockAlert">
             <button class="alert-close" onclick="document.getElementById('stockAlert').classList.add('hidden')">×</button>
             <i class="fas fa-exclamation-triangle"></i>
             <div class="alert-content">
                 <h3>¡Alerta de Stock Bajo!</h3>
-                <p>3 productos están por debajo del nivel mínimo: <strong>Cerveza Pilsen (5 unid.), Vino Tacama (2 unid.), Ron Cartavio (3 unid.)</strong></p>
+                <p>No hay productos con stock crítico</p>
             </div>
         </div>
     </div>
@@ -575,8 +574,8 @@
                 <div class="stat-content">
                     <div class="stat-info">
                         <p>Total Productos</p>
-                        <p>248</p>
-                        <p class="positive">↑ 12 nuevos</p>
+                        <p>0</p>
+                        <p class="positive">En inventario</p>
                     </div>
                     <div class="stat-icon blue">
                         <i class="fas fa-box"></i>
@@ -588,8 +587,8 @@
                 <div class="stat-content">
                     <div class="stat-info">
                         <p>Ventas Hoy</p>
-                        <p>S/ 1,450</p>
-                        <p class="positive">32 transacciones</p>
+                        <p>S/ 0.00</p>
+                        <p class="positive">0 transacciones</p>
                     </div>
                     <div class="stat-icon green">
                         <i class="fas fa-chart-line"></i>
@@ -601,7 +600,7 @@
                 <div class="stat-content">
                     <div class="stat-info">
                         <p>Stock Bajo</p>
-                        <p>3</p>
+                        <p>0</p>
                         <p class="negative">Requiere atención</p>
                     </div>
                     <div class="stat-icon red">
@@ -609,7 +608,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -652,21 +650,15 @@
                     </div>
                 </div>
             </button>
-
-                </div>
         </div>
     </div>
+
     <!-- Footer -->
     <footer>
         <p>Sistema de Gestión LicoresTorres v1.0 | San Jerónimo, Cusco | © 2025</p>
     </footer>
 
     <script>
-        // Inicializar íconos de Lucide
-        if (typeof lucide !== "undefined") {
-            lucide.createIcons();
-        }
-
         let darkMode = false;
 
         function toggleDarkMode() {
@@ -683,7 +675,7 @@
             }
         }
 
-        // SINCRONIZACIÓN CON CONTROL DE STOCK
+        // SINCRONIZACIÓN CON CONTROL DE STOCK Y VENTAS
         function getStatus(producto) {
             if (producto.stockActual <= producto.stockMinimo * 0.5) return 'critical';
             if (producto.stockActual <= producto.stockMinimo) return 'low';
@@ -691,7 +683,7 @@
         }
 
         function updateDashboardData() {
-            // Cargar productos desde localStorage
+            // 1. ACTUALIZAR INVENTARIO Y STOCK BAJO
             const data = localStorage.getItem("inventario_productos");
             
             if (data) {
@@ -717,6 +709,12 @@
                     stockBajoCard.textContent = stockBajo.length;
                 }
                 
+                // Actualizar Total Productos
+                const totalProductosCard = document.querySelector('.stat-card.blue .stat-info p:nth-child(2)');
+                if (totalProductosCard) {
+                    totalProductosCard.textContent = productos.length;
+                }
+                
                 // Actualizar alerta de stock bajo
                 if (stockCritico.length > 0) {
                     const alertBox = document.getElementById('stockAlert');
@@ -730,6 +728,35 @@
                     alertBox.classList.remove('hidden');
                 } else {
                     document.getElementById('stockAlert').classList.add('hidden');
+                }
+            }
+
+            // 2. ACTUALIZAR VENTAS DEL DÍA
+            const statsData = localStorage.getItem('dashboard_stats');
+            if (statsData) {
+                const stats = JSON.parse(statsData);
+                
+                // Actualizar Ventas Hoy (monto)
+                const ventasHoyMonto = document.querySelector('.stat-card.green .stat-info p:nth-child(2)');
+                if (ventasHoyMonto) {
+                    ventasHoyMonto.textContent = `S/ ${stats.ventasHoy.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                
+                // Actualizar transacciones hoy
+                const ventasHoyTransacciones = document.querySelector('.stat-card.green .stat-info p:last-child');
+                if (ventasHoyTransacciones) {
+                    ventasHoyTransacciones.innerHTML = `<span class="positive">${stats.transaccionesHoy} transacciones</span>`;
+                }
+            } else {
+                // Si no hay datos, mostrar ceros
+                const ventasHoyMonto = document.querySelector('.stat-card.green .stat-info p:nth-child(2)');
+                if (ventasHoyMonto) {
+                    ventasHoyMonto.textContent = 'S/ 0.00';
+                }
+                
+                const ventasHoyTransacciones = document.querySelector('.stat-card.green .stat-info p:last-child');
+                if (ventasHoyTransacciones) {
+                    ventasHoyTransacciones.innerHTML = '<span class="positive">0 transacciones</span>';
                 }
             }
         }
