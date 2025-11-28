@@ -590,7 +590,13 @@
                     <i class="fas fa-history"></i>
                     Historial de Ventas
                 </h2>
-                <span class="results-count" id="resultsCount">Mostrando 0 ventas</span>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <span class="results-count" id="resultsCount">Mostrando 0 ventas</span>
+                    <button class="btn btn-secondary" onclick="clearAllSales()" style="width: auto; padding: 0.5rem 1rem;">
+                        <i class="fas fa-trash"></i>
+                        Limpiar Historial
+                    </button>
+                </div>
             </div>
 
             <div class="table-wrapper">
@@ -828,6 +834,9 @@
                 updateInventoryStock(item.id, item.quantity);
             });
             
+            // ACTUALIZAR DASHBOARD: Actualizar estadísticas en el dashboard principal
+            updateDashboardStats();
+            
             displaySales(allSales);
             
             // Clear cart and client
@@ -929,6 +938,40 @@
         function clearSearch() {
             document.getElementById('searchClient').value = '';
             displaySales(allSales);
+        }
+
+        // Clear all sales history
+        function clearAllSales() {
+            if (confirm('¿Estás seguro de que deseas eliminar TODO el historial de ventas?\n\nEsta acción no se puede deshacer.')) {
+                localStorage.removeItem('licoresTorres_sales');
+                allSales = [];
+                displaySales(allSales);
+                updateDashboardStats();
+                alert('Historial de ventas eliminado correctamente');
+            }
+        }
+
+        // Actualizar estadísticas del dashboard principal
+        function updateDashboardStats() {
+            // Calcular ventas del día actual
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const todaySales = allSales.filter(sale => {
+                const saleDate = new Date(sale.date);
+                saleDate.setHours(0, 0, 0, 0);
+                return saleDate.getTime() === today.getTime();
+            });
+            
+            const totalToday = todaySales.reduce((sum, sale) => sum + sale.total, 0);
+            const transactionsToday = todaySales.length;
+            
+            // Guardar en localStorage para que el dashboard lo lea
+            localStorage.setItem('dashboard_stats', JSON.stringify({
+                ventasHoy: totalToday,
+                transaccionesHoy: transactionsToday,
+                lastUpdate: new Date().toISOString()
+            }));
         }
     </script>
 </body>
