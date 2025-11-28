@@ -721,21 +721,29 @@
     }
 
     function loadData() {
+        // Datos iniciales con stockMinimo = 10 y stockMaximo = 500
+        const datosIniciales = [
+            { id: 1, nombre: 'Cerveza Pilsen 620ml', categoria: 'Cervezas', stockActual: 105, stockMinimo: 10, stockMaximo: 500, precio: 5.50 },
+            { id: 2, nombre: 'Vino Tacama Tinto', categoria: 'Vinos', stockActual: 99, stockMinimo: 10, stockMaximo: 500, precio: 45.00 },
+            { id: 3, nombre: 'Ron Cartavio XO', categoria: 'Rones', stockActual: 58, stockMinimo: 10, stockMaximo: 500, precio: 35.00 },
+            { id: 4, nombre: 'Whisky Johnny Walker Red', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 500, precio: 120.00 },
+            { id: 5, nombre: 'Cerveza Cusqueña 650ml', categoria: 'Cervezas', stockActual: 45, stockMinimo: 10, stockMaximo: 500, precio: 6.00 },
+        ];
 
-        // PRIMERO intentar cargar desde localStorage
         const data = localStorage.getItem("inventario_productos");
 
         if (data) {
             productos = JSON.parse(data);
+            // FORZAR stockMinimo = 10 y stockMaximo = 500 para todos
+            productos = productos.map(p => ({
+                ...p,
+                stockMinimo: 10,
+                stockMaximo: 500
+            }));
+            // Guardar inmediatamente con los cambios
+            localStorage.setItem("inventario_productos", JSON.stringify(productos));
         } else {
-            // Si no existe en localStorage, cargar datos iniciales
-            productos = [
-                { id: 1, nombre: 'Cerveza Pilsen 620ml', categoria: 'Cervezas', stockActual: 5, stockMinimo: 10, stockMaximo: 100, precio: 5.50 },
-                { id: 2, nombre: 'Vino Tacama Tinto', categoria: 'Vinos', stockActual: 2, stockMinimo: 5, stockMaximo: 50, precio: 45.00 },
-                { id: 3, nombre: 'Ron Cartavio XO', categoria: 'Rones', stockActual: 3, stockMinimo: 8, stockMaximo: 60, precio: 35.00 },
-                { id: 4, nombre: 'Whisky Johnny Walker Red', categoria: 'Whiskys', stockActual: 12, stockMinimo: 10, stockMaximo: 40, precio: 120.00 },
-                { id: 5, nombre: 'Cerveza Cusqueña 650ml', categoria: 'Cervezas', stockActual: 45, stockMinimo: 15, stockMaximo: 120, precio: 6.00 },
-            ];
+            productos = datosIniciales;
         }
     }
 
@@ -855,12 +863,31 @@
         }
 
         const index = productos.findIndex(p => p.id === selectedProduct.id);
-        productos[index].stockActual = Math.max(0, productos[index].stockActual + adjust);
+        const nuevoStock = productos[index].stockActual + adjust;
+
+        // VALIDACIÓN: No puede quedar en negativo
+        if (nuevoStock < 0) {
+            alert('❌ No puedes quitar más productos de los que hay en el inventario.\n\nStock actual: ' + productos[index].stockActual + ' unidades');
+            return;
+        }
+
+        // VALIDACIÓN: No puede superar el máximo (500)
+        if (nuevoStock > productos[index].stockMaximo) {
+            const disponibleAgregar = productos[index].stockMaximo - productos[index].stockActual;
+            alert('❌ No puedes agregar más de ' + productos[index].stockMaximo + ' unidades.\n\n' +
+                'Stock actual: ' + productos[index].stockActual + ' unidades\n' +
+                'Máximo permitido: ' + productos[index].stockMaximo + ' unidades\n' +
+                'Puedes agregar como máximo: ' + disponibleAgregar + ' unidades');
+            return;
+        }
+
+        // Si pasó las validaciones, actualizar el stock
+        productos[index].stockActual = nuevoStock;
 
         saveData();   // GUARDAR EN LOCALSTORAGE
         closeModal();
         renderTable();
-        alert('Stock actualizado correctamente');
+        alert('✅ Stock actualizado correctamente');
     }
 
     document.getElementById('modalOverlay').addEventListener('click', function(e) {
