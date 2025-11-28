@@ -230,7 +230,7 @@
       </div>
 
       <button class="btn" type="submit">Aumentar Stock</button>
-      <button class="btn" type="button" onclick="window.location.href='Principal.html'">Regresar</button>
+
     </form>
 
     <h2 style="margin-top:25px; color:var(--accent); font-size:1.2rem">Inventario Actual</h2>
@@ -307,6 +307,13 @@
             return;
         }
 
+        /* ---------- VALIDACIÓN: no permitir superar 99 ---------- */
+        if (producto.stockActual + cantidad > 99) {
+            alert(`No se puede agregar esta cantidad.\nEl stock máximo permitido es 99.\nStock actual: ${producto.stockActual}`);
+            return;
+        }
+        /* --------------------------------------------------------- */
+
         /*  Aumentar stock */
         producto.stockActual += cantidad;
 
@@ -323,6 +330,7 @@
     renderTablaLocal();
 
 </script>
+
 
 </body>
 </html>
