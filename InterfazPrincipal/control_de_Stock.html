@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>Control de Stock - LicoresTorres</title>
+    <title>Control de Inventario - LicoresTorres</title>
     <style>
         * {
             margin: 0;
@@ -61,7 +61,12 @@
             font-size: 0.875rem;
         }
 
-        .back-btn {
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .back-btn, .action-btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
@@ -75,7 +80,7 @@
             transition: all 0.3s;
         }
 
-        .back-btn:hover {
+        .back-btn:hover, .action-btn:hover {
             background: rgba(255,255,255,0.3);
         }
 
@@ -356,7 +361,7 @@
             border: 1px solid #a7f3d0;
         }
 
-        .btn-adjust {
+        .btn-adjust, .btn-history {
             background: #d97706;
             color: white;
             border: none;
@@ -369,6 +374,11 @@
             align-items: center;
             gap: 0.35rem;
             transition: all 0.3s;
+            margin-right: 0.5rem;
+        }
+
+        .btn-history {
+            background: #3b82f6;
         }
 
         .btn-adjust:hover {
@@ -376,7 +386,12 @@
             transform: translateY(-1px);
         }
 
-        .btn-adjust svg {
+        .btn-history:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-adjust svg, .btn-history svg {
             width: 14px;
             height: 14px;
         }
@@ -434,7 +449,9 @@
             border-radius: 0.75rem;
             padding: 1.5rem;
             width: 90%;
-            max-width: 450px;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0 20px 25px rgba(0,0,0,0.15);
         }
 
@@ -462,6 +479,7 @@
         }
 
         .form-group input,
+        .form-group select,
         .form-group textarea {
             width: 100%;
             padding: 0.75rem;
@@ -472,6 +490,7 @@
         }
 
         .form-group input:focus,
+        .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #d97706;
@@ -544,6 +563,82 @@
             background: #b45309;
         }
 
+        .history-item {
+            border-left: 3px solid #d97706;
+            padding: 1rem;
+            background: #f9fafb;
+            margin-bottom: 0.75rem;
+            border-radius: 0.5rem;
+        }
+
+        .history-item.entrada {
+            border-left-color: #10b981;
+        }
+
+        .history-item.salida {
+            border-left-color: #ef4444;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-type {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .history-date {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .history-details {
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        .history-reason {
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-style: italic;
+            margin-top: 0.25rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #d97706;
+            border-bottom-color: #d97706;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .filter-section {
                 flex-direction: column;
@@ -553,6 +648,9 @@
             }
             .stats-row {
                 grid-template-columns: 1fr 1fr;
+            }
+            .header-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -569,10 +667,16 @@
                     <p>Control de Inventario</p>
                 </div>
             </div>
-            <button class="back-btn" onclick="window.location.href='Principal.html'">
-                <i class="fas fa-arrow-left"></i>
-                Volver al Inicio
-            </button>
+            <div class="header-actions">
+                <button class="action-btn" onclick="openReportsModal()">
+                    <i class="fas fa-chart-bar"></i>
+                    Reportes
+                </button>
+                <button class="back-btn" onclick="window.location.href='Principal.html'">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver al Inicio
+                </button>
+            </div>
         </div>
     </header>
 
@@ -581,7 +685,7 @@
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <h1 class="page-title">Control de Inventario</h1>
         </div>
-        <p class="page-subtitle">Monitorea niveles de inventario</p>
+        <p class="page-subtitle">Sistema completo de gestión y control de inventario</p>
 
         <div class="stats-row">
             <div class="stat-card red">
@@ -590,7 +694,7 @@
                 </div>
                 <div class="stat-info">
                     <p>STOCK CRÍTICO</p>
-                    <p id="statCritical">3</p>
+                    <p id="statCritical">0</p>
                 </div>
             </div>
             <div class="stat-card yellow">
@@ -599,7 +703,7 @@
                 </div>
                 <div class="stat-info">
                     <p>STOCK BAJO</p>
-                    <p id="statLow">2</p>
+                    <p id="statLow">0</p>
                 </div>
             </div>
             <div class="stat-card green">
@@ -608,7 +712,7 @@
                 </div>
                 <div class="stat-info">
                     <p>STOCK NORMAL</p>
-                    <p id="statNormal">3</p>
+                    <p id="statNormal">0</p>
                 </div>
             </div>
             <div class="stat-card blue">
@@ -670,7 +774,7 @@
             </div>
         </div>
 
-        <div class="alert-box" id="alertBox">
+        <div class="alert-box" id="alertBox" style="display: none;">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <div>
                 <h4>¡Atención! Productos con stock crítico</h4>
@@ -679,22 +783,49 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="modalOverlay">
+    <!-- Modal Ajustar Stock -->
+    <div class="modal-overlay" id="modalAdjust">
         <div class="modal">
-            <h3 class="modal-title" id="modalTitle">Ajustar Stock</h3>
+            <h3 class="modal-title" id="modalTitle">Registrar Movimiento de Inventario</h3>
             <div class="modal-body">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab('entrada')">
+                        <i class="fas fa-plus-circle"></i> Entrada
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('salida')">
+                        <i class="fas fa-minus-circle"></i> Salida
+                    </button>
+                </div>
+
                 <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">
                     Stock actual: <strong id="modalCurrentStock">0</strong> unidades
                 </p>
+
                 <div class="form-group">
-                    <label>Cantidad a ajustar *</label>
-                    <input type="number" id="adjustQuantity" placeholder="Ej: 10 para agregar, -5 para restar">
-                    <p class="form-hint">Use números negativos para reducir stock</p>
+                    <label>Tipo de Movimiento</label>
+                    <select id="movementType">
+                        <option value="Compra">Compra a proveedor</option>
+                        <option value="Devolución">Devolución de cliente</option>
+                        <option value="Ajuste entrada">Ajuste por inventario (entrada)</option>
+                    </select>
                 </div>
+
                 <div class="form-group">
-                    <label>Motivo del ajuste</label>
-                    <textarea id="adjustReason" rows="3" placeholder="Ingrese el motivo del ajuste..."></textarea>
+                    <label>Cantidad *</label>
+                    <input type="number" id="adjustQuantity" placeholder="Ingrese la cantidad" min="1">
+                    <p class="form-hint">Ingrese solo números positivos</p>
                 </div>
+
+                <div class="form-group">
+                    <label>Motivo / Observaciones *</label>
+                    <textarea id="adjustReason" rows="3" placeholder="Ej: Compra a proveedor XYZ, Factura #123"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" id="adjustResponsible" placeholder="Nombre del responsable">
+                </div>
+
                 <div class="preview-box">
                     <span>Nuevo stock: </span>
                     <strong id="previewStock">0</strong>
@@ -702,26 +833,82 @@
                 </div>
             </div>
             <div class="modal-buttons">
-                <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
-                <button class="btn btn-confirm" onclick="confirmAdjust()">
+                <button class="btn btn-cancel" onclick="closeModal('modalAdjust')">Cancelar</button>
+                <button class="btn btn-confirm" onclick="confirmMovement()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    Confirmar
+                    Confirmar Movimiento
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Historial -->
+    <div class="modal-overlay" id="modalHistory">
+        <div class="modal">
+            <h3 class="modal-title" id="historyTitle">Historial de Movimientos</h3>
+            <div class="modal-body" id="historyContent">
+                <p style="color: #6b7280; text-align: center;">Cargando historial...</p>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal('modalHistory')" style="flex: none; width: 100%;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reportes -->
+    <div class="modal-overlay" id="modalReports">
+        <div class="modal">
+            <h3 class="modal-title">Reportes de Inventario</h3>
+            <div class="modal-body">
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #1f2937; font-weight: 600; margin-bottom: 0.75rem;">Resumen General</h4>
+                    <div style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <div>
+                                <p style="color: #6b7280; font-size: 0.75rem;">Total Productos</p>
+                                <p style="color: #1f2937; font-weight: 600;" id="reportTotalProducts">0</p>
+                            </div>
+                            <div>
+                                <p style="color: #6b7280; font-size: 0.75rem;">Valor Total</p>
+                                <p style="color: #1f2937; font-weight: 600;" id="reportTotalValue">S/ 0.00</p>
+                            </div>
+                            <div>
+                                <p style="color: #6b7280; font-size: 0.75rem;">Movimientos Hoy</p>
+                                <p style="color: #1f2937; font-weight: 600;" id="reportMovementsToday">0</p>
+                            </div>
+                            <div>
+                                <p style="color: #6b7280; font-size: 0.75rem;">Productos Críticos</p>
+                                <p style="color: #ef4444; font-weight: 600;" id="reportCritical">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="color: #1f2937; font-weight: 600; margin-bottom: 0.75rem;">Productos más vendidos</h4>
+                    <div id="topProducts" style="background: #f9fafb; padding: 1rem; border-radius: 0.5rem;">
+                        <p style="color: #6b7280; font-size: 0.875rem;">Calculando...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeModal('modalReports')" style="flex: none; width: 100%;">Cerrar</button>
             </div>
         </div>
     </div>
 
 <script>
     let productos = [];
-
-    /* ---  FUNCIONES PARA LOCALSTORAGE  --- */
+    let movimientos = [];
+    let currentMovementType = 'entrada';
+    let selectedProduct = null;
 
     function saveData() {
         localStorage.setItem("inventario_productos", JSON.stringify(productos));
+        localStorage.setItem("inventario_movimientos", JSON.stringify(movimientos));
     }
 
     function loadData() {
-        // Datos iniciales con stockMinimo = 10 y stockMaximo = 500
         const datosIniciales = [
             { id: 1, nombre: 'Cerveza Pilsen 620ml', categoria: 'Cervezas', stockActual: 105, stockMinimo: 10, stockMaximo: 500, precio: 5.50 },
             { id: 2, nombre: 'Vino Tacama Tinto', categoria: 'Vinos', stockActual: 99, stockMinimo: 10, stockMaximo: 500, precio: 45.00 },
@@ -730,26 +917,26 @@
             { id: 5, nombre: 'Cerveza Cusqueña 650ml', categoria: 'Cervezas', stockActual: 45, stockMinimo: 10, stockMaximo: 500, precio: 6.00 },
         ];
 
-        const data = localStorage.getItem("inventario_productos");
+        const dataProducts = localStorage.getItem("inventario_productos");
+        const dataMovements = localStorage.getItem("inventario_movimientos");
 
-        if (data) {
-            productos = JSON.parse(data);
-            // FORZAR stockMinimo = 10 y stockMaximo = 500 para todos
+        if (dataProducts) {
+            productos = JSON.parse(dataProducts);
             productos = productos.map(p => ({
                 ...p,
                 stockMinimo: 10,
                 stockMaximo: 500
             }));
-            // Guardar inmediatamente con los cambios
-            localStorage.setItem("inventario_productos", JSON.stringify(productos));
         } else {
             productos = datosIniciales;
         }
+
+        if (dataMovements) {
+            movimientos = JSON.parse(dataMovements);
+        } else {
+            movimientos = [];
+        }
     }
-
-    /* ------------------------------ */
-
-    let selectedProduct = null;
 
     function getStatus(p) {
         if (p.stockActual <= p.stockMinimo * 0.5) return 'critical';
@@ -798,7 +985,12 @@
                         <span class="badge ${badgeClass[estado]}">${estadoTexto[estado]}</span>
                     </td>
                     <td class="center">
-                        <button class="btn-adjust" onclick="openModal(${p.id})">Ajustar</button>
+                        <button class="btn-history" onclick="openHistory(${p.id})">
+                            <i class="fas fa-history"></i>
+                        </button>
+                        <button class="btn-adjust" onclick="openModal(${p.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -830,81 +1022,243 @@
         }
     }
 
+    function switchTab(type) {
+        currentMovementType = type;
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const select = document.getElementById('movementType');
+        if (type === 'entrada') {
+            select.innerHTML = `
+                <option value="Compra">Compra a proveedor</option>
+                <option value="Devolución">Devolución de cliente</option>
+                <option value="Ajuste entrada">Ajuste por inventario (entrada)</option>
+            `;
+        } else {
+            select.innerHTML = `
+                <option value="Venta">Venta a cliente</option>
+                <option value="Merma">Merma o producto dañado</option>
+                <option value="Consumo interno">Consumo interno</option>
+                <option value="Ajuste salida">Ajuste por inventario (salida)</option>
+            `;
+        }
+
+        updatePreview();
+    }
+
     function openModal(id) {
         selectedProduct = productos.find(p => p.id === id);
-        document.getElementById('modalTitle').textContent = `Ajustar Stock - ${selectedProduct.nombre}`;
+        document.getElementById('modalTitle').textContent = `Registrar Movimiento - ${selectedProduct.nombre}`;
         document.getElementById('modalCurrentStock').textContent = selectedProduct.stockActual;
         document.getElementById('adjustQuantity').value = '';
         document.getElementById('adjustReason').value = '';
+        document.getElementById('adjustResponsible').value = '';
         document.getElementById('previewStock').textContent = selectedProduct.stockActual;
-        document.getElementById('modalOverlay').classList.add('active');
+        
+        // Reset tabs
+        currentMovementType = 'entrada';
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+        switchTab('entrada');
+        
+        document.getElementById('modalAdjust').classList.add('active');
     }
 
-    function closeModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
         selectedProduct = null;
     }
 
-    document.getElementById('adjustQuantity').addEventListener('input', function() {
+    function updatePreview() {
         if (selectedProduct) {
-            const adjust = parseInt(this.value) || 0;
-            const newStock = Math.max(0, selectedProduct.stockActual + adjust);
+            const quantity = parseInt(document.getElementById('adjustQuantity').value) || 0;
+            let newStock;
+            
+            if (currentMovementType === 'entrada') {
+                newStock = selectedProduct.stockActual + quantity;
+            } else {
+                newStock = selectedProduct.stockActual - quantity;
+            }
+            
+            newStock = Math.max(0, newStock);
             document.getElementById('previewStock').textContent = newStock;
         }
-    });
+    }
 
-    function confirmAdjust() {
+    document.getElementById('adjustQuantity').addEventListener('input', updatePreview);
+
+    function confirmMovement() {
         if (!selectedProduct) return;
 
-        const adjust = parseInt(document.getElementById('adjustQuantity').value) || 0;
-        if (adjust === 0) {
-            alert('Ingrese una cantidad válida');
+        const quantity = parseInt(document.getElementById('adjustQuantity').value);
+        const reason = document.getElementById('adjustReason').value.trim();
+        const responsible = document.getElementById('adjustResponsible').value.trim();
+        const type = document.getElementById('movementType').value;
+
+        if (!quantity || quantity <= 0) {
+            alert('❌ Ingrese una cantidad válida (mayor a 0)');
+            return;
+        }
+
+        if (!reason) {
+            alert('❌ Debe ingresar el motivo del movimiento');
             return;
         }
 
         const index = productos.findIndex(p => p.id === selectedProduct.id);
-        const nuevoStock = productos[index].stockActual + adjust;
+        let nuevoStock;
 
-        // VALIDACIÓN: No puede quedar en negativo
-        if (nuevoStock < 0) {
-            alert('❌ No puedes quitar más productos de los que hay en el inventario.\n\nStock actual: ' + productos[index].stockActual + ' unidades');
-            return;
+        if (currentMovementType === 'entrada') {
+            nuevoStock = productos[index].stockActual + quantity;
+            
+            if (nuevoStock > productos[index].stockMaximo) {
+                const disponible = productos[index].stockMaximo - productos[index].stockActual;
+                alert(`❌ No puede superar el stock máximo de ${productos[index].stockMaximo} unidades.\n\nStock actual: ${productos[index].stockActual}\nPuede agregar máximo: ${disponible} unidades`);
+                return;
+            }
+        } else {
+            nuevoStock = productos[index].stockActual - quantity;
+            
+            if (nuevoStock < 0) {
+                alert(`❌ No hay suficiente stock.\n\nStock actual: ${productos[index].stockActual} unidades\nIntentó retirar: ${quantity} unidades`);
+                return;
+            }
         }
 
-        // VALIDACIÓN: No puede superar el máximo (500)
-        if (nuevoStock > productos[index].stockMaximo) {
-            const disponibleAgregar = productos[index].stockMaximo - productos[index].stockActual;
-            alert('❌ No puedes agregar más de ' + productos[index].stockMaximo + ' unidades.\n\n' +
-                'Stock actual: ' + productos[index].stockActual + ' unidades\n' +
-                'Máximo permitido: ' + productos[index].stockMaximo + ' unidades\n' +
-                'Puedes agregar como máximo: ' + disponibleAgregar + ' unidades');
-            return;
-        }
+        // Registrar el movimiento
+        const movimiento = {
+            id: Date.now(),
+            productoId: selectedProduct.id,
+            productoNombre: selectedProduct.nombre,
+            tipo: currentMovementType,
+            subTipo: type,
+            cantidad: quantity,
+            stockAnterior: productos[index].stockActual,
+            stockNuevo: nuevoStock,
+            motivo: reason,
+            responsable: responsible || 'No especificado',
+            fecha: new Date().toISOString()
+        };
 
-        // Si pasó las validaciones, actualizar el stock
+        movimientos.push(movimiento);
         productos[index].stockActual = nuevoStock;
 
-        saveData();   // GUARDAR EN LOCALSTORAGE
-        closeModal();
+        saveData();
+        closeModal('modalAdjust');
         renderTable();
-        alert('✅ Stock actualizado correctamente');
+        
+        const tipoTexto = currentMovementType === 'entrada' ? 'entrada' : 'salida';
+        alert(`✅ Movimiento registrado correctamente\n\nTipo: ${tipoTexto}\nCantidad: ${quantity} unidades\nNuevo stock: ${nuevoStock}`);
     }
 
-    document.getElementById('modalOverlay').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
+    function openHistory(id) {
+        const producto = productos.find(p => p.id === id);
+        const productMovements = movimientos.filter(m => m.productoId === id).reverse();
 
+        document.getElementById('historyTitle').textContent = `Historial - ${producto.nombre}`;
+
+        if (productMovements.length === 0) {
+            document.getElementById('historyContent').innerHTML = `
+                <p style="color: #6b7280; text-align: center; padding: 2rem;">
+                    No hay movimientos registrados para este producto
+                </p>
+            `;
+        } else {
+            const html = productMovements.map(m => {
+                const fecha = new Date(m.fecha);
+                const fechaFormato = fecha.toLocaleDateString('es-PE') + ' ' + fecha.toLocaleTimeString('es-PE', {hour: '2-digit', minute: '2-digit'});
+                const icono = m.tipo === 'entrada' ? 'plus-circle' : 'minus-circle';
+                const signo = m.tipo === 'entrada' ? '+' : '-';
+                
+                return `
+                    <div class="history-item ${m.tipo}">
+                        <div class="history-header">
+                            <span class="history-type">
+                                <i class="fas fa-${icono}"></i> ${m.subTipo}
+                            </span>
+                            <span class="history-date">${fechaFormato}</span>
+                        </div>
+                        <div class="history-details">
+                            <strong>${signo}${m.cantidad}</strong> unidades | 
+                            Stock: ${m.stockAnterior} → ${m.stockNuevo}
+                        </div>
+                        <div class="history-reason">
+                            ${m.motivo} | Responsable: ${m.responsable}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('historyContent').innerHTML = html;
+        }
+
+        document.getElementById('modalHistory').classList.add('active');
+    }
+
+    function openReportsModal() {
+        // Actualizar reportes
+        document.getElementById('reportTotalProducts').textContent = productos.length;
+        
+        const value = productos.reduce((sum, p) => sum + (p.stockActual * p.precio), 0);
+        document.getElementById('reportTotalValue').textContent = `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`;
+        
+        const today = new Date().toDateString();
+        const movimientosHoy = movimientos.filter(m => new Date(m.fecha).toDateString() === today).length;
+        document.getElementById('reportMovementsToday').textContent = movimientosHoy;
+        
+        const critical = productos.filter(p => getStatus(p) === 'critical').length;
+        document.getElementById('reportCritical').textContent = critical;
+
+        // Productos más vendidos (salidas)
+        const salidas = {};
+        movimientos.filter(m => m.tipo === 'salida' && m.subTipo === 'Venta').forEach(m => {
+            if (!salidas[m.productoNombre]) {
+                salidas[m.productoNombre] = 0;
+            }
+            salidas[m.productoNombre] += m.cantidad;
+        });
+
+        const topProductsArray = Object.entries(salidas)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+
+        if (topProductsArray.length === 0) {
+            document.getElementById('topProducts').innerHTML = `
+                <p style="color: #6b7280; font-size: 0.875rem;">No hay ventas registradas aún</p>
+            `;
+        } else {
+            const html = topProductsArray.map((item, index) => `
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb;">
+                    <span style="color: #4b5563;">${index + 1}. ${item[0]}</span>
+                    <span style="color: #d97706; font-weight: 600;">${item[1]} unidades</span>
+                </div>
+            `).join('');
+            document.getElementById('topProducts').innerHTML = html;
+        }
+
+        document.getElementById('modalReports').classList.add('active');
+    }
+
+    // Event listeners
     document.getElementById('searchInput').addEventListener('input', renderTable);
     document.getElementById('filterCategory').addEventListener('change', renderTable);
     document.getElementById('filterStatus').addEventListener('change', renderTable);
 
-    /* ---  CARGAR DATOS AL INICIAR  --- */
-    loadData();     // Cargar inventario
-    saveData();     // Guardarlo aunque el usuario no toque nada
-    renderTable();  // Mostrar tabla
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal(this.id);
+            }
+        });
+    });
 
+    // Inicializar
+    loadData();
+    saveData();
+    renderTable();
 </script>
 
 </body>
 </html>
-
