@@ -643,44 +643,63 @@
         function saveInventory(productos) {
             localStorage.setItem("inventario_productos", JSON.stringify(productos));
         }
-
-        // Actualizar stock en inventario
-        function updateInventoryStock(productId, quantitySold) {
-            let productos = loadInventory();
-            
-            console.log('=== ACTUALIZANDO INVENTARIO ===');
-            console.log('Producto ID a buscar:', productId, 'Tipo:', typeof productId);
-            console.log('Cantidad vendida:', quantitySold);
-            console.log('Inventario completo:', productos);
-            
-            // Buscar el producto por ID y reducir su stock
-            const productIndex = productos.findIndex(p => {
-                console.log('Comparando:', p.id, 'con', parseInt(productId), '- Match:', p.id === parseInt(productId));
-                return p.id === parseInt(productId);
-            });
-            
-            console.log('Índice encontrado:', productIndex);
-            
-            if (productIndex !== -1) {
-                const oldStock = productos[productIndex].stockActual;
-                productos[productIndex].stockActual -= quantitySold;
-                
-                // Asegurarse de que el stock no sea negativo
-                if (productos[productIndex].stockActual < 0) {
-                    productos[productIndex].stockActual = 0;
-                }
-                
-                console.log(`Stock actualizado: ${productos[productIndex].nombre}`);
-                console.log(`Stock anterior: ${oldStock} -> Nuevo stock: ${productos[productIndex].stockActual}`);
-                
-                saveInventory(productos);
-                console.log('Inventario guardado en localStorage');
-            } else {
-                console.error('¡PRODUCTO NO ENCONTRADO EN INVENTARIO!');
-                console.log('IDs disponibles:', productos.map(p => p.id));
+        // Cargar movimientos desde localStorage
+        function loadMovements() {
+            const data = localStorage.getItem("inventario_movimientos");
+            if (data) {
+                return JSON.parse(data);
             }
-            console.log('=== FIN ACTUALIZACIÓN ===');
+            return [];
         }
+
+        // Guardar movimientos en localStorage
+        function saveMovements(movimientos) {
+            localStorage.setItem("inventario_movimientos", JSON.stringify(movimientos));
+        }
+
+        // Actualizar stock en inventario Y registrar movimiento
+function updateInventoryStock(productId, quantitySold, saleNumber, clientName) {
+    let productos = loadInventory();
+    let movimientos = loadMovements();
+    
+    const productIndex = productos.findIndex(p => p.id === parseInt(productId));
+    
+    if (productIndex !== -1) {
+        const producto = productos[productIndex];
+        const oldStock = producto.stockActual;
+        const newStock = oldStock - quantitySold;
+        
+        // Actualizar stock
+        productos[productIndex].stockActual = Math.max(0, newStock);
+        
+        // 🎯 REGISTRAR MOVIMIENTO EN EL HISTORIAL
+        const movimiento = {
+            id: Date.now() + Math.random(),
+            productoId: producto.id,
+            productoNombre: producto.nombre,
+            tipo: 'salida',
+            subTipo: 'Venta',
+            cantidad: quantitySold,
+            stockAnterior: oldStock,
+            stockNuevo: productos[productIndex].stockActual,
+            motivo: `Venta #${saleNumber} - Cliente: ${clientName}`,
+            responsable: 'Sistema de Ventas',
+            fecha: new Date().toISOString()
+        };
+        
+        movimientos.push(movimiento);
+        
+        console.log('✅ Stock actualizado:', producto.nombre);
+        console.log('   Stock anterior:', oldStock, '→ Nuevo:', newStock);
+        console.log('✅ Movimiento registrado');
+        
+        // Guardar cambios
+        saveInventory(productos);
+        saveMovements(movimientos);
+    } else {
+        console.error('❌ PRODUCTO NO ENCONTRADO');
+    }
+}
 
         // Update client info display
         document.getElementById('clientName').addEventListener('input', updateClientDisplay);
@@ -822,9 +841,10 @@
             allSales.unshift(sale);
             saveSales();
             
-            // ACTUALIZAR INVENTARIO: Reducir stock de cada producto vendido
+            // ACTUALIZAR INVENTARIO Y REGISTRAR MOVIMIENTOS
+            const clientFullName = `${currentClient.name} ${currentClient.lastName}`;
             cart.forEach(item => {
-                updateInventoryStock(item.id, item.quantity);
+                updateInventoryStock(item.id, item.quantity, sale.saleNumber, clientFullName);
             });
             
             // ACTUALIZAR DASHBOARD: Actualizar estadísticas en el dashboard principal
